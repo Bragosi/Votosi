@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model AdminLogin {
+  id       String @id @default(cuid())
+  email    String @unique
+  password String
+}
+
+model AuthorizedAdmin {
+  id       String  @id @default(uuid())
+  email    String? @unique
+  pin      String
+  password String
+}
+
+model Admin {
+  id String @id @default(cuid())
+
+  // Personal Info
+  firstName String
+  surname  String
+  otherName String?
+  email     String @unique
+  profilePicture String
+  DOB String
+  sex Sex
+  maritalStatus MaritalStatus
+  state String
+  LGA String
+  education EducationLevel
+  residentialAddress String
+
+  // Login
+  password String?
+
+  // Generated Credentials
+  adminId       String @unique
+  activationPin String
+
+  // Account Status
+  isActivated Boolean @default(false)
+
+  // Role
+  role AdminRole @default(OFFICER)
+
+  // Audit
+  createdById String?
+  createdBy   Admin?  @relation("AdminCreator", fields: [createdById], references: [id])
+
+  createdAdmins Admin[] @relation("AdminCreator")
+
+  // Voters created by this officer/admin
+  votersCreated Voter[] @relation("OfficerCreatedVoters")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Voter {
+  id String @id @default(cuid())
+
+  // Personal Info
+  firstName      String
+  surname       String
+  otherName      String?
+  email          String  @unique
+  profilePicture String
+  DOB String
+  sex Sex
+  maritalStatus MaritalStatus
+  state String
+  LGA String
+  education EducationLevel
+  residentialAddress String
+  // Login
+  password String?
+
+  // Generated Credentials
+  voterId       String @unique
+  activationPin String
+
+  // Account Status
+  isActivated Boolean @default(false)
+
+  // Audit
+  createdById String?
+  createdBy   Admin? @relation("OfficerCreatedVoters", fields: [createdById], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+enum AdminRole {
+  OFFICER
+  ADMIN
+}
+
+enum Sex {
+  MALE
+  FEMALE
+}
+
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+  DIVORCED
+  WIDOWED
+}
+
+enum EducationLevel {
+  PRIMARY
+  SECONDARY
+  TERTIARY
+}
