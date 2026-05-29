@@ -4,6 +4,8 @@ import { useEffect } from "react";
 
 import { EmptyState } from "@/components/general/EmptyState";
 import { useAuthStore } from "@/app/store/useAuthStore";
+import { Loader2 } from "lucide-react";
+import RevokeOfficerAccess from "./RevokeOfficerAccess";
 
 export default function RegisteredOfficers() {
   const {
@@ -16,6 +18,8 @@ export default function RegisteredOfficers() {
     getRegisteredOfficers();
   }, [getRegisteredOfficers]);
 
+
+
   return (
     <div className="w-full space-y-2">
       {/* Header */}
@@ -27,14 +31,21 @@ export default function RegisteredOfficers() {
 
       {/* Loading state */}
       {isGettingOfficers && (
-        <div className="py-6 text-sm text-muted-foreground">
-          Loading officers...
+        <div className="py-6 flex items-center justify-center w-full text-sm text-muted-foreground">
+          <Loader2 className="animate-spin size-6 text-primary" />
         </div>
       )}
 
       {/* Empty state */}
       {!isGettingOfficers && officers.length === 0 && (
-        <EmptyState title={"No Registered Officials"} description={"No officers have been registered. Register an election officer to see them here "} buttonText={"Register Officer"} href={"/register-officers"} />
+        <EmptyState
+          title={"No Registered Officials"}
+          description={
+            "No officers have been registered. Register an election officer to see them here "
+          }
+          buttonText={"Register Officer"}
+          href={"/register-officers"}
+        />
       )}
 
       {/* Data rows */}
@@ -50,9 +61,7 @@ export default function RegisteredOfficers() {
           </div>
 
           <div className="w-1/3 text-right">
-            <button className="text-red-500 hover:underline">
-              Delete
-            </button>
+          <RevokeOfficerAccess officer={officer}/>
           </div>
         </div>
       ))}

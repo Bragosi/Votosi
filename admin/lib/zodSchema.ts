@@ -1,11 +1,31 @@
 import { z } from "zod";
 
-export const adminSignupSchema = z.object({
-  email: z.string().email("Invalid email format"),
+export const adminLoginSchema = z.object({
+  identifier: z
+    .string()
+    .trim()
+    .min(5, { message: "Identifier cannot be less than 5 characters" }),
 
   password: z
     .string()
     .min(6, { message: "Password must not be less than 6 characters" }),
+});
+
+export const activateAdminAccountSchema = z.object({
+  activationPin: z
+    .string()
+    .trim()
+    .min(5, { message: "Activation Pin cannot be less than 5 characters" }),
+  adminId: z
+    .string()
+    .trim()
+    .min(5, { message: "adminId cannot be less than 5 characters" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must not be less than 6 characters" }),
+  confirmPassword: z
+    .string()
+    .min(6, { message: "Confirm Password must not be less than 6 characters" }),
 });
 
 export const RegisterOfficerSchema = z.object({
@@ -40,7 +60,6 @@ export const RegisterOfficerSchema = z.object({
   }),
 });
 
-
 export const RegisterVoterSchema = z.object({
   firstName: z.string().trim().min(3, {
     message: "First name must be at least 3 characters",
@@ -73,8 +92,9 @@ export const RegisterVoterSchema = z.object({
   }),
 });
 
-
-
-export type adminSignUpSchemaType = z.infer<typeof adminSignupSchema>;
+export type activateAdminAccountSchemaType = z.infer<
+  typeof activateAdminAccountSchema
+>;
+export type adminLoginSchemaType = z.infer<typeof adminLoginSchema>;
 export type RegisterOfficerSchemaType = z.infer<typeof RegisterOfficerSchema>;
 export type RegisterVoterSchemaType = z.infer<typeof RegisterVoterSchema>;

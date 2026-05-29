@@ -3,57 +3,69 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { generateToken } from "../../lib/generateToken.js";
 
-export const AdminSignup = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+export const AdminLogin = async (req: Request, res: Response) => {
+  const { identifier, password } = req.body;
 
   try {
-    // validation
-    if (!email || !password) {
+    // 1. Validate input
+    if (!identifier || !password) {
       return res.status(400).json({
         message: "All fields are required",
       });
     }
 
-    if (password.length < 6) {
-      return res.status(400).json({
-        message: "Password must be at least 6 characters long",
-      });
-    }
-
-    // check existing user
-    const user = await prisma.adminLogin.findUnique({
+    // 2. Find user by email OR adminId
+    const user = await prisma.admin.findFirst({
       where: {
-        email,
+        OR: [
+          { email: identifier },
+          { adminId: identifier },
+        ],
       },
     });
 
-    if (user) {
+    if (!user) {
       return res.status(400).json({
-        message: "User already exists",
+        message: "Invalid credentials",
       });
     }
 
-    // hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // 3. Check activation
+    if (!user.isActivated) {
+      return res.status(400).json({
+        message: "Account not activated",
+      });
+    }
 
-    // create user
-    const newAdmin = await prisma.adminLogin.create({
-      data: {
-        email,
-        password: hashedPassword,
-      },
-    });
-    console.log("🔥 Admin signup route hit");
-    // generate token
-    generateToken(newAdmin.id, res);
+    // 4. Check password exists
+    if (!user.password) {
+      return res.status(400).json({
+        message: "No password set for this account",
+      });
+    }
 
-    return res.status(201).json({
-      id: newAdmin.id,
-      email: newAdmin.email,
+    // 5. Compare password
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      user.password
+    );
+
+    if (!isPasswordCorrect) {
+      return res.status(400).json({
+        message: "Incorrect password",
+      });
+    }
+
+    // 6. Generate token
+    generateToken(user.id, res);
+
+    return res.status(200).json({
+      message: "Login successful",
+      data: user,
     });
+
   } catch (error) {
-    console.log("Error in Register Controller", error);
+    console.log("Error in Admin Login", error);
 
     return res.status(500).json({
       message: "Internal Server Error",

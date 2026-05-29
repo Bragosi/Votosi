@@ -11,12 +11,26 @@ type AuthUser = {
 type AuthStore = {
   authUser: AuthUser | null;
   isCheckingAuth: boolean;
-  isSigningUp: boolean;
+  isLoggingIn: boolean;
   isRegisteringOfficer: boolean;
   isRegisteringVoter: boolean;
   isGettingOfficers: boolean;
+  isGettingVoters: boolean;
+  isDeletingOfficers: boolean;
+  isDeletingVoter: boolean;
+  isActivatingAccount: boolean;
 
-  adminSignUp: (data: { email: string; password: string }) => Promise<boolean>;
+  adminLogin: (data: {
+    identifier: string;
+    password: string;
+  }) => Promise<boolean>;
+
+  activateAdminAccount: (data: {
+    adminId: string;
+    password: string;
+    confirmPassword: string;
+    activationPin: string;
+  }) => Promise<boolean>;
 
   logout: () => Promise<void>;
 
@@ -25,37 +39,72 @@ type AuthStore = {
   registerOfficer: (formData: FormData) => Promise<boolean>;
   registerVoter: (formData: FormData) => Promise<boolean>;
   officers: any[];
-getRegisteredOfficers: () => Promise<any[]>;
+  getRegisteredOfficers: () => Promise<any[]>;
+  getRegisteredVoters: () => Promise<any[]>;
+  voters: any[];
+  DeleteOfficers: (officerId: string) => Promise<boolean>;
+  DeleteVoter: (voterId: string) => Promise<boolean>;
 };
 
 export const useAuthStore = create<AuthStore>((set) => ({
   authUser: null,
   isCheckingAuth: true,
-  isSigningUp: false,
+  isLoggingIn: false,
   isRegisteringOfficer: false,
   isRegisteringVoter: false,
   isGettingOfficers: false,
   officers: [],
+  isGettingVoters: false,
+  voters: [],
+  isDeletingOfficers: false,
+  isDeletingVoter: false,
+  isActivatingAccount: false,
 
-  adminSignUp: async (data) => {
+  activateAdminAccount: async (data) => {
     try {
-      set({ isSigningUp: true });
+      set({ isActivatingAccount: true });
 
-      const res = await axiosInstance.post("/admin/signup", data);
+      const res = await axiosInstance.post("/admin/activateAdminAccount", data);
 
-      set({ authUser: res.data.user ?? res.data });
+      toast.success(res.data?.message || "Account activated successfully");
 
-      toast.success("Account created successfully");
+      // optional: auto-login after activation
+      set({ authUser: res.data?.data });
+
       return true;
     } catch (error: any) {
-      console.log("Error in adminSignUp", error);
+      console.log("Error activating account", error);
+
+      toast.error(error.response?.data?.message || "Activation failed");
+
+      return false;
+    } finally {
+      set({ isActivatingAccount: false });
+    }
+  },
+
+  
+  adminLogin: async (data) => {
+    try {
+      set({ isLoggingIn: true });
+
+      const res = await axiosInstance.post("/admin/adminLogin", data);
+
+      set({ authUser: res.data.data });
+
+      toast.success("Login successful");
+
+      return true;
+    } catch (error: any) {
+      console.log("Error in adminLogin", error);
 
       set({ authUser: null });
 
-      toast.error(error.response?.data?.message || "Signup failed");
+      toast.error(error.response?.data?.message || "Login failed");
+
       return false;
     } finally {
-      set({ isSigningUp: false });
+      set({ isLoggingIn: false });
     }
   },
 
@@ -146,6 +195,72 @@ export const useAuthStore = create<AuthStore>((set) => ({
       return [];
     } finally {
       set({ isGettingOfficers: false });
+    }
+  },
+
+  getRegisteredVoters: async () => {
+    set({ isGettingVoters: true });
+    try {
+      const res = await axiosInstance.get("/admin/getRegisteredVoters");
+      const voters = res.data?.data ?? [];
+      set({ voters });
+      return voters;
+    } catch (error: any) {
+      console.log("Error getting officer", error);
+
+      toast.error(
+        error.response?.data?.message || "Failed to Get registered officer",
+      );
+
+      return [];
+    } finally {
+      set({ isGettingVoters: false });
+    }
+  },
+
+  DeleteOfficers: async (officerId: string) => {
+    set({ isDeletingOfficers: true });
+    try {
+      await axiosInstance.delete(`/admin/deleteOfficer/${officerId}`);
+
+      set((state) => ({
+        officers: state.officers.filter((officer) => officer.id !== officerId),
+      }));
+
+      toast.success("Officer deleted successfully");
+
+      return true;
+    } catch (error: any) {
+      console.log("Error deleting officer", error);
+
+      toast.error(error.response?.data?.message || "Failed to delete officer");
+
+      return false;
+    } finally {
+      set({ isDeletingOfficers: false });
+    }
+  },
+
+  DeleteVoter: async (voterId: string) => {
+    set({ isDeletingVoter: true });
+    try {
+      await axiosInstance.delete(`/admin/deleteVoter/${voterId}`);
+
+      set((state) => ({
+        voters: state.voters.filter((voters) => voters.id !== voterId),
+      }));
+
+      toast.success("Voter deleted successfully");
+
+      return true;
+    } catch (error: any) {
+      console.log("Error deleting Voter", error);
+
+      toast.error(error.response?.data?.message || "Failed to delete Voter");
+
+      return false;
+    } finally {
+      set({ isDeletingVoter: false });
     }
   },
 }));

@@ -6,19 +6,6 @@ datasource db {
   provider = "postgresql"
 }
 
-model AdminLogin {
-  id       String @id @default(cuid())
-  email    String @unique
-  password String
-}
-
-model AuthorizedAdmin {
-  id       String  @id @default(uuid())
-  email    String? @unique
-  pin      String
-  password String
-}
-
 model Admin {
   id String @id @default(cuid())
 
