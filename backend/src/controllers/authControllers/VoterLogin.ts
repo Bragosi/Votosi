@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { generateToken } from "../../lib/generateToken.js";
 
-export const AdminLogin = async (req: Request, res: Response) => {
+export const VoterLogin = async (req: Request, res: Response) => {
   const { identifier, password } = req.body;
 
   try {
@@ -14,15 +14,15 @@ export const AdminLogin = async (req: Request, res: Response) => {
       });
     }
 
-    // 2. Find user by email OR adminId
-    const user = await prisma.admin.findFirst({
+    // 2. Find user by email OR voterId
+    const user = await prisma.voter.findFirst({
       where: {
-        OR: [{ email: identifier }, { adminId: identifier }],
+        OR: [{ email: identifier }, { voterId: identifier }],
       },
       select: {
         id: true,
         email: true,
-        adminId: true,
+        voterId: true,
         password: true,
         isActivated: true,
       },
@@ -65,7 +65,7 @@ export const AdminLogin = async (req: Request, res: Response) => {
       data: user,
     });
   } catch (error) {
-    console.log("Error in Admin Login", error);
+    console.log("Error in Voter Login", error);
 
     return res.status(500).json({
       message: "Internal Server Error",

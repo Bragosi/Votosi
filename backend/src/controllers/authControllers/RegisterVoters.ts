@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
 import { prisma } from "../../lib/prisma.js";
-import {
-  Generatepin,
-  GenerateVoterId,
-} from "../../utils/utilities.js";
+import { Generatepin, GenerateVoterId } from "../../utils/utilities.js";
 import { sendEmail } from "../../lib/email.service.js";
 import { RegisterVoterTemplate } from "../../utils/emailTemplates.js";
 import bcrypt from "bcrypt";
@@ -23,7 +20,9 @@ export const RegisterVoter = async (req: Request, res: Response) => {
     education,
     residentialAddress,
   } = req.body;
+  console.log("📩 Incoming email:", email);
   try {
+     console.log("🚀 RegisterVoter started");
     if (
       !firstName ||
       !surname ||
@@ -68,7 +67,7 @@ export const RegisterVoter = async (req: Request, res: Response) => {
         surname,
         otherName,
         email,
-          DOB,
+        DOB,
         sex,
         maritalStatus,
         state,
@@ -80,8 +79,8 @@ export const RegisterVoter = async (req: Request, res: Response) => {
         activationPin: hashedPin,
       },
     });
-
-    await sendEmail({
+console.log("📤 About to send email to:", email);
+   const emailResult = await sendEmail({
       to: email,
       subject: "Votosi Registration",
       html: RegisterVoterTemplate(
@@ -90,6 +89,8 @@ export const RegisterVoter = async (req: Request, res: Response) => {
         generatedActivationPin,
       ),
     });
+    console.log("📬 Email result:", emailResult);
+    
     return res.status(201).json({
       data: newVoter,
       message: "Voter registered successfully",

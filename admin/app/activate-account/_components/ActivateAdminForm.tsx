@@ -50,7 +50,7 @@ export function ActivateAdminForm({
     }
     const success = await activateAdminAccount(data);
     if (success) {
-      router.push("/login");
+      router.push("/");
     }
   };
 
@@ -58,16 +58,16 @@ export function ActivateAdminForm({
     <div
       className={cn(
         "flex items-center justify-center min-h-screen px-4",
-        className,
+        className + "w-full",
       )}
       {...props}
     >
-      <Card className="w-full max-w-md shadow-lg border-muted">
+      <Card className="w-full  max-w-md shadow-lg border-muted">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-semibold">
+          <CardTitle className="text-2xl items-center justify-center flex font-semibold">
             Activate Your Account
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="flex text-center justify-center">
             Enter your admin details to activate your account
           </CardDescription>
         </CardHeader>

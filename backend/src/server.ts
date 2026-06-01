@@ -5,6 +5,7 @@ import { prisma } from "./lib/prisma.js";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
+import voterAuthRoutes from "./routes/voterAuthRoutes.js";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
 
 // 4. API Routes LAST
 app.use("/api/admin", authRoutes);
+app.use("/api/voter", voterAuthRoutes);
 
 app.listen(PORT, async () => {
   try {

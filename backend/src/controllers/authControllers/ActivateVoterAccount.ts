@@ -3,22 +3,22 @@ import { prisma } from "../../lib/prisma.js";
 import bcrypt from "bcrypt";
 import { generateToken } from "../../lib/generateToken.js";
 
-export const ActivateAdminAccount = async (req: Request, res: Response) => {
-  const { adminId, activationPin, password } = req.body;
+export const ActivateVoterAccount = async (req: Request, res: Response) => {
+  const { voterId, activationPin, password } = req.body;
 
   try {
-    if (!adminId || !activationPin || !password) {
+    if (!voterId || !activationPin || !password) {
       return res.status(400).json({
         message: "All fields are required",
       });
     }
 
-    const user = await prisma.admin.findUnique({
-      where: { adminId },
+    const user = await prisma.voter.findUnique({
+      where: { voterId },
       select: {
         id: true,
         email: true,
-        adminId: true,
+        voterId: true,
         password: true,
         isActivated: true,
         activationPin: true,
@@ -27,7 +27,7 @@ export const ActivateAdminAccount = async (req: Request, res: Response) => {
 
     if (!user) {
       return res.status(404).json({
-        message: "Admin not found",
+        message: "Voter not found",
       });
     }
 
@@ -51,8 +51,8 @@ export const ActivateAdminAccount = async (req: Request, res: Response) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const activatedUser = await prisma.admin.update({
-      where: { adminId },
+    const activatedUser = await prisma.voter.update({
+      where: { voterId },
       data: {
         password: hashedPassword,
         isActivated: true,
@@ -66,7 +66,7 @@ export const ActivateAdminAccount = async (req: Request, res: Response) => {
       data: activatedUser,
     });
   } catch (error) {
-    console.log("Error in ActivateAdmin Controller", error);
+    console.log("Error in Activate Voter Controller", error);
 
     return res.status(500).json({
       message: "Internal Server Error",

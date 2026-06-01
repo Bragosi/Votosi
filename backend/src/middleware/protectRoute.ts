@@ -26,7 +26,7 @@ export const protectRoute = async (
       return res.status(401).json({ message: "Invalid token" });
     }
 
-    const user = await prisma.adminLogin.findUnique({
+    const user = await prisma.admin.findUnique({
       where: {
         id: decoded.userId,
       },

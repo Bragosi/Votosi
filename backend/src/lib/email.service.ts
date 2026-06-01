@@ -14,6 +14,7 @@ export const sendEmail = async ({
   text,
 }: SendEmailParams) => {
   try {
+    console.log("📨 Sending email via SMTP...");
     const info = await transporter.sendMail({
       from: `"Votosi App" <${process.env.SMTP_USER}>`,
       to,
@@ -23,6 +24,7 @@ export const sendEmail = async ({
     });
 
     console.log("Email sent:", info.messageId);
+    console.log("📨 SMTP response:", info);
     return info;
   } catch (error: any) {
     console.error("Email error:", error.message);
