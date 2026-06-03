@@ -92,9 +92,28 @@ export const RegisterVoterSchema = z.object({
   }),
 });
 
+export const CreateElectionSchema = z
+  .object({
+    title: z.string().trim().min(5, {
+      message: "Title must be at least 5 characters",
+    }),
+
+    description: z.string().trim().min(10, {
+      message: "Description must be at least 10 characters",
+    }),
+
+    startDate: z.string().min(1, "Start date is required"),
+    endDate: z.string().min(1, "End date is required"),
+  })
+  .refine((data) => new Date(data.startDate) < new Date(data.endDate), {
+    message: "End date must be after start date",
+    path: ["endDate"],
+  });
+
 export type activateAdminAccountSchemaType = z.infer<
   typeof activateAdminAccountSchema
 >;
 export type adminLoginSchemaType = z.infer<typeof adminLoginSchema>;
 export type RegisterOfficerSchemaType = z.infer<typeof RegisterOfficerSchema>;
 export type RegisterVoterSchemaType = z.infer<typeof RegisterVoterSchema>;
+export type CreateElectionSchemaType = z.infer<typeof CreateElectionSchema>;

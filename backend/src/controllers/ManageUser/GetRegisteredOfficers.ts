@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+  import { Request, Response } from "express";
 import { prisma } from "../../lib/prisma.js";
 
 export const GetRegisteredOfficers = async (req: Request, res: Response) => {

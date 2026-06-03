@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import voterAuthRoutes from "./routes/voterAuthRoutes.js";
+import electionRoutes from "./routes/electionRoutes.js";
 
 dotenv.config();
 
@@ -23,14 +24,13 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// 3. Logger next (Ensures we catch everything coming through)
 app.use((req, res, next) => {
   next();
 });
 
-// 4. API Routes LAST
 app.use("/api/admin", authRoutes);
 app.use("/api/voter", voterAuthRoutes);
+app.use("/api/election", electionRoutes);
 
 app.listen(PORT, async () => {
   try {

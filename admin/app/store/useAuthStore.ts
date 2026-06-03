@@ -83,7 +83,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
     }
   },
 
-  
   adminLogin: async (data) => {
     try {
       set({ isLoggingIn: true });

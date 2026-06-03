@@ -17,15 +17,12 @@ import {
 } from "@/components/ui/sidebar";
 import {
   LayoutDashboardIcon,
-  ListIcon,
-  ChartBarIcon,
-  FolderIcon,
-  UsersIcon,
   CameraIcon,
   FileTextIcon,
   Settings2Icon,
   SearchIcon,
   CommandIcon,
+  User2,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -44,22 +41,7 @@ const data = {
     {
       title: "Register Voters",
       url: "/register-voters",
-      icon: <LayoutDashboardIcon />,
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: <ChartBarIcon />,
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: <FolderIcon />,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: <UsersIcon />,
+      icon: <User2 />,
     },
   ],
   navClouds: [
