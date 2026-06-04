@@ -5,8 +5,8 @@ import { prisma } from "./lib/prisma.js";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
-import voterAuthRoutes from "./routes/voterAuthRoutes.js";
 import electionRoutes from "./routes/electionRoutes.js";
+import voterRoutes from "./routes/voterRoutes.js";
 
 dotenv.config();
 
@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/admin", authRoutes);
-app.use("/api/voter", voterAuthRoutes);
+app.use("/api/voter", voterRoutes);
 app.use("/api/election", electionRoutes);
 
 app.listen(PORT, async () => {

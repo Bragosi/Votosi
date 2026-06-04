@@ -27,10 +27,11 @@ import { Button } from "@/components/ui/button";
 import { RichTextEditor } from "@/components/rich-text-editor/Editor";
 import { useElectionStore } from "@/app/store/useElectionStore";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function CreateElectionForm() {
   const { createElection, isCreatingElection } = useElectionStore();
-
+  const router = useRouter();
   const form = useForm<z.infer<typeof CreateElectionSchema>>({
     resolver: zodResolver(CreateElectionSchema),
     defaultValues: {
@@ -46,6 +47,7 @@ export default function CreateElectionForm() {
       const success = await createElection(values);
 
       if (success) {
+        router.push("/election");
         form.reset();
       }
     } catch (error) {

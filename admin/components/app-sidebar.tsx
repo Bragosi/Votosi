@@ -1,8 +1,6 @@
 "use client";
 
 import * as React from "react";
-
-import { NavDocuments } from "@/components/nav-documents";
 import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
@@ -23,6 +21,7 @@ import {
   SearchIcon,
   CommandIcon,
   User2,
+  BoxIcon,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -42,6 +41,11 @@ const data = {
       title: "Register Voters",
       url: "/register-voters",
       icon: <User2 />,
+    },
+        {
+      title: "Elections",
+      url: "/election",
+      icon: <BoxIcon />,
     },
   ],
   navClouds: [

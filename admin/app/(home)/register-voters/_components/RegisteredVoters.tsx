@@ -26,7 +26,7 @@ export default function RegisteredVoters() {
       {/* Loading state */}
       {isGettingVoters && (
         <div className="py-6 flex items-center justify-center w-full text-sm text-muted-foreground">
-          <Loader2 className="animate-spin size-6 text-primary"/>
+          <Loader2 className="animate-spin size-6 text-primary" />
         </div>
       )}
 
@@ -52,7 +52,7 @@ export default function RegisteredVoters() {
           </div>
 
           <div className="w-1/3 text-right">
-      <RevokeVoterAccess voter={voter}/>
+            <RevokeVoterAccess voter={voter} />
           </div>
         </div>
       ))}
