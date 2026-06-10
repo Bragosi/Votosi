@@ -79,7 +79,6 @@ export const RegisterVoter = async (req: Request, res: Response) => {
         activationPin: hashedPin,
       },
     });
-console.log("📤 About to send email to:", email);
    const emailResult = await sendEmail({
       to: email,
       subject: "Votosi Registration",
