@@ -22,6 +22,12 @@ export const DeleteElection = async (req: Request, res: Response) => {
                 message: "Election not found",
             });
         }
+        if(election.status === "ACTIVE"){
+               return res.status(404).json({
+                success: false,
+                message: "Active Election cannot be deleted",
+            });
+        }
 
         await prisma.election.delete({
             where: {
