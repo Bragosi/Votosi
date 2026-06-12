@@ -16,6 +16,11 @@ export const GetVoterElection = async (req: Request, res: Response) => {
         startDate: true,
         endDate: true,
         status: true,
+        _count:{
+          select:{
+            votes : true
+          }
+        }
       },
     });
 

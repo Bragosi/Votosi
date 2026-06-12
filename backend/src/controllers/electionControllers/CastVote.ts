@@ -1,0 +1,109 @@
+import { Request, Response } from "express";
+import { prisma } from "../../lib/prisma.js";
+
+interface AuthenticatedUser {
+  id: string;
+}
+
+interface Params {
+  candidateId: string;
+}
+
+export interface AuthenticatedRequest extends Request<Params> {
+  user?: AuthenticatedUser;
+}
+
+export const CastVote = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try { 
+    const { candidateId } = req.params;
+    const voterId = req.user?.id;
+
+    if (!voterId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const candidate = await prisma.candidate.findUnique({
+      where: {
+        id: candidateId,
+      },
+      include: {
+        election: true,
+      },
+    });
+
+    if (!candidate) {
+      return res.status(404).json({
+        success: false,
+        message: "Candidate not found",
+      });
+    }
+
+    const election = candidate.election;
+
+    if (election.status !== "ACTIVE") {
+      return res.status(400).json({
+        success: false,
+        message: "Election is not active",
+      });
+    }
+
+    const now = new Date();
+
+    if (now < election.startDate) {
+      return res.status(400).json({
+        success: false,
+        message: "Election has not started",
+      });
+    }
+
+    if (now > election.endDate) {
+      return res.status(400).json({
+        success: false,
+        message: "Election has ended",
+      });
+    }
+
+    const existingVote = await prisma.vote.findUnique({
+      where: {
+        voterId_electionId: {
+          voterId,
+          electionId: election.id,
+        },
+      },
+    });
+
+    if (existingVote) {
+      return res.status(400).json({
+        success: false,
+        message: "You have already voted in this election",
+      });
+    }
+
+    const vote = await prisma.vote.create({
+      data: {
+        voterId,
+        electionId: election.id,
+        candidateId,
+      },
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Vote cast successfully",
+      vote,
+    });
+  } catch (error) {
+    console.error("Cast Vote Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+}; 

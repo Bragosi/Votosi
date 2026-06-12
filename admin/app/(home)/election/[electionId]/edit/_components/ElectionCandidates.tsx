@@ -98,12 +98,6 @@ export default function ElectionCandidates({
                 </div>
 
                 <div className="w-1/3 text-right">
-                  <Link
-                    className={buttonVariants({ variant: "outline" })}
-                    href={`/election/${electionId}/candidate/${candidate.id}/edit`}
-                  >
-                    <Pencil />
-                  </Link>
                   <DeleteCandidate candidate={candidate} />
                 </div>
               </div>

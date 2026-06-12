@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import { prisma } from "../../lib/prisma.js";
 
-export const GetCandidatesInElection = async (req: Request, res: Response) => {
+export const GetCandidateInElectionMobileSide = async (
+  req: Request,
+  res: Response,
+) => {
   const { electionId } = req.params;
 
   if (!electionId || typeof electionId !== "string") {
@@ -17,17 +20,18 @@ export const GetCandidatesInElection = async (req: Request, res: Response) => {
         electionId,
       },
       select: {
-        id : true,
+        id: true,
         firstName: true,
         surname: true,
         otherName: true,
         party: true,
-        election : true,
-        electionId : true,
+        imageUrl: true,
+        bio: true,
+        electionId: true,
         _count:{
-          select: {
-            votes: true
-          }
+            select:{
+                votes:true
+            }
         }
       },
     });

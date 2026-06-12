@@ -22,10 +22,10 @@ export const DeleteElection = async (req: Request, res: Response) => {
                 message: "Election not found",
             });
         }
-        if(election.status === "ACTIVE"){
+        if(election.status !== "DRAFT"){
                return res.status(404).json({
                 success: false,
-                message: "Active Election cannot be deleted",
+                message: "Only drafted election can be deleted",
             });
         }
 

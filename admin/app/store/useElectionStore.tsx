@@ -40,12 +40,6 @@ type ElectionStore = {
   GetCandidatesInElections: (electionId: string) => Promise<any[]>;
   isDeletingCandidate: boolean;
   DeleteCandidate: (candidateId: string) => Promise<boolean>;
-  isEditingCandidate: boolean;
-  EditCandidate: (
-    electionId: string,
-    candidateId: string,
-    formData: FormData,
-  ) => Promise<boolean>;
 };
 
 export const useElectionStore = create<ElectionStore>((set) => ({
@@ -58,7 +52,6 @@ export const useElectionStore = create<ElectionStore>((set) => ({
   isGettingCandidatesInElection: false,
   CandidatesInElection: [],
   isDeletingCandidate: false,
-  isEditingCandidate: false,
 
   createElection: async (data) => {
     try {
@@ -213,43 +206,6 @@ export const useElectionStore = create<ElectionStore>((set) => ({
       return false;
     } finally {
       set({ isDeletingCandidate: false });
-    }
-  },
-  EditCandidate: async (
-    electionId: string,
-    candidateId: string,
-    formData: FormData,
-  ) => {
-    try {
-      set({ isEditingCandidate: true });
-
-      const res = await axiosInstance.put(
-        `/election/editCandidate/${electionId}/${candidateId}/candidate`,
-        formData,
-      );
-
-      toast.success(res.data?.message || "Candidate updated successfully");
-
-      set((state) => ({
-        CandidatesInElection: state.CandidatesInElection.map((candidate) =>
-          candidate.id === candidateId
-            ? { ...candidate, ...res.data?.data }
-            : candidate,
-        ),
-      }));
-
-      return true;
-    } catch (error: any) {
-      console.log("Error editing candidate", error);
-
-      toast.error(
-        error.response?.data?.message ||
-          "Failed to update candidate information",
-      );
-
-      return false;
-    } finally {
-      set({ isEditingCandidate: false });
     }
   },
 }));
