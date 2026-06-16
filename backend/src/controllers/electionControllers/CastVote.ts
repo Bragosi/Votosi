@@ -45,14 +45,6 @@ export const CastVote = async (
     }
 
     const election = candidate.election;
-
-    if (election.status !== "ACTIVE") {
-      return res.status(400).json({
-        success: false,
-        message: "Election is not active",
-      });
-    }
-
     const now = new Date();
 
     if (now < election.startDate) {

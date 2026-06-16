@@ -23,6 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EditElectionForm from "./_components/EditElectionForm";
 import { EmptyState } from "@/components/general/EmptyState";
 import ElectionCandidates from "./_components/ElectionCandidates";
+import ElectionCandidateCard from "./_components/ElectionCandidateCard";
 
 export default function EditElectionPage() {
   const { electionId } = useParams<{ electionId: string }>();
@@ -112,7 +113,7 @@ export default function EditElectionPage() {
             </CardHeader>
 
             <CardContent>
-              <ElectionCandidates electionId={electionId} />
+              <ElectionCandidateCard electionId={electionId} />
             </CardContent>
           </Card>
         </TabsContent>

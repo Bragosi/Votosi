@@ -104,7 +104,6 @@ export default function Election() {
                       {election.status}
                     </Badge>
                   </div>
-
                   {/* Dates */}
                   <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
                     <Calendar className="size-4 shrink-0 text-primary" />
@@ -113,19 +112,22 @@ export default function Election() {
                       {new Date(election.endDate).toLocaleDateString()}
                     </span>
                   </div>
+                <div>
+                  Total Votes:<span className="text-primary"> {election._count.votes}</span>
+                  </div>
                 </div>
 
                 {/* Actions */}
                 <div className="flex flex-wrap gap-2 w-full sm:w-auto">
-                    <Link
-                      className={buttonVariants({
-                        variant: "outline",
-                        size: "sm",
-                      })}
-                      href={`/election/${election.id}/edit`}
-                    >
-                      <Pencil className="size-4 text-primary" />
-                    </Link>
+                  <Link
+                    className={buttonVariants({
+                      variant: "outline",
+                      size: "sm",
+                    })}
+                    href={`/election/${election.id}/edit`}
+                  >
+                    <Pencil className="size-4 text-primary" />
+                  </Link>
 
                   <DeleteElection election={election} />
                 </div>

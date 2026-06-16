@@ -13,13 +13,13 @@ dotenv.config();
 const PORT = process.env.PORT || 5000;
 const app = express();
 
-// 1. CORS MUST BE FIRST
-app.use(cors({
-  origin: "http://localhost:3000",
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  }),
+);
 
-// 2. Parsers next
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

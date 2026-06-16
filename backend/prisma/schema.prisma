@@ -9,7 +9,6 @@ datasource db {
 model Admin {
   id String @id @default(cuid())
 
-  // Personal Info
   firstName String
   surname  String
   otherName String?
@@ -23,26 +22,25 @@ model Admin {
   education EducationLevel
   residentialAddress String
 
-  // Login
   password String?
 
-  // Generated Credentials
+  
   adminId       String @unique
   activationPin String
 
-  // Account Status
+
   isActivated Boolean @default(false)
 
-  // Role
+
   role AdminRole @default(OFFICER)
 
-  // Audit
+
   createdById String?
   createdBy   Admin?  @relation("AdminCreator", fields: [createdById], references: [id])
 
   createdAdmins Admin[] @relation("AdminCreator")
 
-  // Voters created by this officer/admin
+
   votersCreated Voter[] @relation("OfficerCreatedVoters")
 
   createdAt DateTime @default(now())
@@ -52,7 +50,6 @@ model Admin {
 model Voter {
   id String @id @default(cuid())
 
-  // Personal Info
   firstName      String
   surname       String
   otherName      String?
@@ -65,20 +62,17 @@ model Voter {
   LGA String
   education EducationLevel
   residentialAddress String
-  // Login
+
   password String?
 
-  // Generated Credentials
   voterId       String @unique
   activationPin String
 
-  // Account Status
   isActivated Boolean @default(false)
 
   votes Vote[]
 
 
-  // Audit
   createdById String?
   createdBy   Admin? @relation("OfficerCreatedVoters", fields: [createdById], references: [id])
 
@@ -105,7 +99,6 @@ model Election {
 model Candidate {
   id          String   @id @default(cuid())
   
-  // Personal Info
   firstName      String
   surname       String
   otherName      String?
@@ -159,7 +152,8 @@ enum ElectionStatus {
   DRAFT
   ACTIVE
   CLOSED
-}
+  UPCOMING
+  }
 
 enum AdminRole {
   OFFICER

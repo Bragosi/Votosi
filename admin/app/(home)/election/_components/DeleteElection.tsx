@@ -20,6 +20,9 @@ type Election = {
   id: string;
   title: string;
   endDate: string;
+  _count?: {
+    votes: number;
+  };
 };
 
 export default function DeleteElection({ election }: { election: Election }) {
@@ -43,17 +46,32 @@ export default function DeleteElection({ election }: { election: Election }) {
 
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete Election?</AlertDialogTitle>
+          <AlertDialogTitle className="text-destructive">
+            Delete Election
+          </AlertDialogTitle>
 
-          <AlertDialogDescription>
-            This will permanently remove{" "}
-            <span className="font-medium text-primary">{election.title}</span>{" "}
-            from the system. And this election is scheduled to end on{" "}
-            <span className="font-medium">
-              {new Date(election.endDate).toLocaleString()}
-            </span>{" "}
-            (ID: <span className="font-medium">{election.id}</span>) from the
-            system.
+          <AlertDialogDescription className="space-y-3">
+            <p>
+              You are about to permanently delete{" "}
+              <span className="font-semibold text-primary">
+                {election.title}
+              </span>
+              . This action cannot be undone.
+            </p>
+
+            <p>
+              This election is scheduled to end on{" "}
+              <span className="font-medium">
+                {new Date(election.endDate).toLocaleString()}
+              </span>
+            </p>
+
+            <p>
+              Total Votes:{" "}
+              <span className="font-semibold text-primary">
+                {election._count?.votes ?? 0}
+              </span>
+            </p>
           </AlertDialogDescription>
         </AlertDialogHeader>
 

@@ -31,11 +31,11 @@ export const DeleteCandidate = async (req: Request, res: Response) => {
       });
     }
 
-    // Prevent deletion if election is active
-    if (candidate.election.status === "ACTIVE") {
+    if (candidate.election.status !== "DRAFT") {
       return res.status(403).json({
         success: false,
-        message: "Candidates cannot be removed while the election is active",
+        message:
+          "Candidates can only be removed while the election is in draft state",
       });
     }
 
@@ -50,8 +50,6 @@ export const DeleteCandidate = async (req: Request, res: Response) => {
       message: "Candidate removed successfully",
     });
   } catch (error) {
-    console.error("Error removing candidate:", error);
-
     return res.status(500).json({
       success: false,
       message: "Failed to remove candidate",

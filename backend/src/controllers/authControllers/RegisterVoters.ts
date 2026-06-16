@@ -20,9 +20,7 @@ export const RegisterVoter = async (req: Request, res: Response) => {
     education,
     residentialAddress,
   } = req.body;
-  console.log("📩 Incoming email:", email);
   try {
-     console.log("🚀 RegisterVoter started");
     if (
       !firstName ||
       !surname ||
@@ -79,7 +77,7 @@ export const RegisterVoter = async (req: Request, res: Response) => {
         activationPin: hashedPin,
       },
     });
-   const emailResult = await sendEmail({
+    await sendEmail({
       to: email,
       subject: "Votosi Registration",
       html: RegisterVoterTemplate(
@@ -88,15 +86,12 @@ export const RegisterVoter = async (req: Request, res: Response) => {
         generatedActivationPin,
       ),
     });
-    console.log("📬 Email result:", emailResult);
-    
+
     return res.status(201).json({
       data: newVoter,
       message: "Voter registered successfully",
     });
   } catch (error: any) {
-    console.error("RegisterVoter error:", error);
-
     if (error.code === "P2002") {
       return res.status(400).json({
         message: "Admin ID already exists",

@@ -4,17 +4,17 @@ import pg from 'pg';
 import bcrypt from 'bcrypt';
 import 'dotenv/config';
 
-// 1. Initialize the native pg Pool connection for Neon Serverless
+
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
 
-// 2. Pass the adapter directly into your client constructor instance
+
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
   console.log('🌱 Starting database seeding...');
 
-  // Clean out older test instances
+
   await prisma.voter.deleteMany({});
   await prisma.admin.deleteMany({});
 
@@ -22,7 +22,7 @@ async function main() {
   const hashedSuperAdminPassword = await bcrypt.hash(defaultPassword, 10);
   const dummyHashedPin = await bcrypt.hash('1234', 10);
 
-  // Create your Super Admin
+
   const superAdmin = await prisma.admin.create({
     data: {
       firstName: 'John',
@@ -50,10 +50,10 @@ async function main() {
 
 main()
   .catch((e) => {
-    console.error('❌ Seeding error:', e);
+    console.error(' Seeding error:', e);
     process.exit(1);
   })
   .finally(async () => {
     await prisma.$disconnect();
-    await pool.end(); // Gracefully close down database sockets
+    await pool.end();
   });

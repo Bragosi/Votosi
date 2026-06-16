@@ -16,10 +16,9 @@ if (globalForPrisma.prisma) {
     connectionString: process.env.DATABASE_URL,
   });
 
-  // 2. Instantiate the driver adapter
-  const adapter = new PrismaPg(pool);
 
-  // 3. Pass the adapter straight to Prisma Client
+  const adapter = new PrismaPg(pool);
+  
   prisma = new PrismaClient({ adapter });
 
   if (process.env.NODE_ENV !== "production") {

@@ -12,11 +12,10 @@ export const CreateCandidate = async (
   req: AuthenticatedRequest,
   res: Response,
 ) => {
-  
-const electionId: string | undefined =
-  typeof req.params.electionId === "string"
-    ? req.params.electionId
-    : undefined;
+  const electionId: string | undefined =
+    typeof req.params.electionId === "string"
+      ? req.params.electionId
+      : undefined;
 
   if (!electionId) {
     return res.status(400).json({
@@ -38,7 +37,6 @@ const electionId: string | undefined =
     party,
   } = req.body;
 
-  // ✅ SAFE VALIDATION (prevents crashes from undefined)
   if (
     !firstName ||
     !surname ||
@@ -56,7 +54,6 @@ const electionId: string | undefined =
     });
   }
 
-  // ✅ multer file check (your route uses upload.single("profilePicture"))
   const file = req.file;
 
   if (!file) {
@@ -66,7 +63,6 @@ const electionId: string | undefined =
   }
 
   try {
-    // 🔥 Upload image first (fail fast if upload fails)
     const uploadedImage: any = await uploadToCloudinary(file.buffer);
 
     if (!uploadedImage?.secure_url) {
@@ -77,7 +73,6 @@ const electionId: string | undefined =
 
     const profilePicture = uploadedImage.secure_url;
 
-    // 🔐 AUTH GUARD
     const admin = await prisma.admin.findUnique({
       where: {
         id: req.user?.id,
@@ -102,7 +97,6 @@ const electionId: string | undefined =
       });
     }
 
-    // 🗳️ ELECTION CHECK
     const election = await prisma.election.findUnique({
       where: {
         id: electionId,
@@ -122,7 +116,6 @@ const electionId: string | undefined =
       });
     }
 
-    // 💾 CREATE CANDIDATE
     const candidate = await prisma.candidate.create({
       data: {
         firstName: firstName.trim(),

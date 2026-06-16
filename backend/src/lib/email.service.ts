@@ -22,12 +22,8 @@ export const sendEmail = async ({
       text,
       html,
     });
-
-    console.log("Email sent:", info.messageId);
-    console.log("📨 SMTP response:", info);
     return info;
   } catch (error: any) {
-    console.error("Email error:", error.message);
     throw new Error("Email could not be sent");
   }
 };

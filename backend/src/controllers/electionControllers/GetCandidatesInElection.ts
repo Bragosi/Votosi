@@ -24,6 +24,10 @@ export const GetCandidatesInElection = async (req: Request, res: Response) => {
         party: true,
         election : true,
         electionId : true,
+        state :true,
+        imageUrl : true,
+        DOB: true,
+        sex: true,
         _count:{
           select: {
             votes: true

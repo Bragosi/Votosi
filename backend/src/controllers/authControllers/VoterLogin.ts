@@ -7,14 +7,12 @@ export const VoterLogin = async (req: Request, res: Response) => {
   const { identifier, password } = req.body;
 
   try {
-    // 1. Validate input
     if (!identifier || !password) {
       return res.status(400).json({
         message: "All fields are required",
       });
     }
 
-    // 2. Find user by email OR voterId
     const user = await prisma.voter.findFirst({
       where: {
         OR: [{ email: identifier }, { voterId: identifier }],
@@ -34,21 +32,18 @@ export const VoterLogin = async (req: Request, res: Response) => {
       });
     }
 
-    // 3. Check activation
     if (!user.isActivated) {
       return res.status(400).json({
         message: "Account not activated",
       });
     }
 
-    // 4. Check password exists
     if (!user.password) {
       return res.status(400).json({
         message: "No password set for this account",
       });
     }
 
-    // 5. Compare password
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if (!isPasswordCorrect) {
@@ -57,7 +52,6 @@ export const VoterLogin = async (req: Request, res: Response) => {
       });
     }
 
-    // 6. Generate token
     generateToken(user.id, res);
 
     return res.status(200).json({
@@ -65,8 +59,6 @@ export const VoterLogin = async (req: Request, res: Response) => {
       data: user,
     });
   } catch (error) {
-    console.log("Error in Voter Login", error);
-
     return res.status(500).json({
       message: "Internal Server Error",
     });
