@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import electionRoutes from "./routes/electionRoutes.js";
 import voterRoutes from "./routes/voterRoutes.js";
+import { startElectionScheduler } from "./lib/electionSchedular.js";
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.listen(PORT, async () => {
     await prisma.$connect();
     console.log("Database connected");
     console.log(`Server running on port ${PORT}`);
+    startElectionScheduler()
   } catch (error) {
     console.log(error);
   }

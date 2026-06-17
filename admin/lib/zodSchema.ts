@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { politicalParties } from "./politicalParties";
 
-export const electionStatus = ["DRAFT", "CLOSED", "ACTIVE"];
+export const electionStatus = ["DRAFT", "CLOSED", "ACTIVE" , "UPCOMING"];
 
 export const adminLoginSchema = z.object({
   identifier: z

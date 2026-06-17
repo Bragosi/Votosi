@@ -4,7 +4,12 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useElectionStore } from "@/app/store/useElectionStore";
 import { EmptyState } from "@/components/general/EmptyState";
-import { Loader2, Plus, Pencil, Calendar, PlusCircleIcon } from "lucide-react";
+import {
+  Loader2,
+  Pencil,
+  Calendar,
+  PlusCircleIcon,
+} from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import DeleteElection from "./_components/DeleteElection";
@@ -25,6 +30,8 @@ export default function Election() {
         return "destructive";
       case "DRAFT":
         return "secondary";
+      case "UPCOMING":
+        return "secondary";
       default:
         return "outline";
     }
@@ -33,37 +40,45 @@ export default function Election() {
   const safeElections = Array.isArray(elections) ? elections : [];
 
   return (
-    <Card className="space-y-6 p-4 sm:p-6">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold">Elections</h1>
-          <p className="text-muted-foreground text-sm sm:text-base">
-            Manage and monitor all elections.
-          </p>
-        </div>
+      <Card className="p-5 sm:p-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              Elections
+            </h1>
+            <p className="text-sm text-muted-foreground sm:text-base">
+              Manage and monitor all elections.
+            </p>
+          </div>
 
-        <Button asChild className="w-full sm:w-auto gap-2">
-          <Link href="/election/create-election">
-            <PlusCircleIcon className="size-4" />
-            Create Election
-          </Link>
-        </Button>
-      </div>
+          <Button asChild className="w-auto">
+            <Link href="/election/create-election">
+              <PlusCircleIcon className="mr-2 size-4" />
+              Create Election
+            </Link>
+          </Button>
+        </div>
+      </Card>
 
       {/* Stats */}
-      <div className="rounded-xl border p-4">
-        <p className="text-sm text-muted-foreground">Total Elections</p>
-        <h2 className="text-2xl sm:text-3xl font-bold">
-          {safeElections.length}
-        </h2>
+      <div className="flex flex-col">
+        <Card className="p-5 w-full">
+          <p className="text-sm text-muted-foreground">
+            Total Elections
+          </p>
+          <h2 className="mt-2 text-3xl font-bold">
+            {safeElections.length}
+          </h2>
+        </Card>
       </div>
 
       {/* Loading */}
       {isGettingElections && (
-        <div className="flex justify-center py-16 sm:py-20">
+        <Card className="flex items-center justify-center py-20">
           <Loader2 className="size-8 animate-spin text-primary" />
-        </div>
+        </Card>
       )}
 
       {/* Empty State */}
@@ -76,66 +91,75 @@ export default function Election() {
         />
       )}
 
-      {/* Election List */}
+      {/* Elections */}
       {!isGettingElections && safeElections.length > 0 && (
         <div className="space-y-4">
           {safeElections.map((election) => (
-            <div
+            <Card
               key={election.id}
-              className="rounded-xl border bg-card p-4 sm:p-5 transition hover:shadow-sm"
+              className="p-4 transition-all duration-200 hover:shadow-md"
             >
-              <div className="flex gap-4 items-center justify-between">
-                {/* Left Content */}
-                <div className="flex-1 min-w-0 space-y-2">
-                  {/* Title + Badge */}
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                    <h3 className="font-semibold text-base sm:text-lg wrap-break-word">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                {/* Election Details */}
+                <div className="min-w-0 flex-1 space-y-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="text-lg font-semibold wrap-break-word">
                       {election.title}
                     </h3>
 
                     <Badge
-                      className={`w-fit ${
-                        election.status?.toUpperCase() === "ACTIVE"
-                          ? "bg-green-600 hover:bg-green-600 text-white"
-                          : ""
-                      }`}
                       variant={getStatusVariant(election.status)}
+                      className={
+                        election.status?.toUpperCase() === "ACTIVE"
+                          ? "bg-green-600 text-white hover:bg-green-600"
+                          : ""
+                      }
                     >
                       {election.status}
                     </Badge>
                   </div>
-                  {/* Dates */}
-                  <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
-                    <Calendar className="size-4 shrink-0 text-primary" />
+
+                  <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                    <Calendar className="size-4 shrink-0" />
+
                     <span className="wrap-break-word">
-                      {new Date(election.startDate).toLocaleDateString()} →{" "}
-                      {new Date(election.endDate).toLocaleDateString()}
+                      {new Date(
+                        election.startDate
+                      ).toLocaleDateString()}{" "}
+                      →{" "}
+                      {new Date(
+                        election.endDate
+                      ).toLocaleDateString()}
                     </span>
                   </div>
-                <div>
-                  Total Votes:<span className="text-primary"> {election._count.votes}</span>
+
+                  <div className="text-sm">
+                    Total Votes:
+                    <span className="ml-2 font-semibold text-primary">
+                      {election._count.votes}
+                    </span>
                   </div>
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+                <div className="flex items-center gap-2 self-start lg:self-center">
                   <Link
+                    href={`/election/${election.id}/edit`}
                     className={buttonVariants({
                       variant: "outline",
                       size: "sm",
                     })}
-                    href={`/election/${election.id}/edit`}
                   >
-                    <Pencil className="size-4 text-primary" />
+                    <Pencil className="size-4" />
                   </Link>
 
                   <DeleteElection election={election} />
                 </div>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
       )}
-    </Card>
+    </div>
   );
 }

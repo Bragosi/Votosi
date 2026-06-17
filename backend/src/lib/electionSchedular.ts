@@ -10,7 +10,7 @@ export const startElectionScheduler = () => {
       await prisma.election.updateMany({
         where: {
           status: "UPCOMING",
-          startDate: {
+          startDate: { 
             lte: now,
           },
           endDate: {
@@ -31,7 +31,7 @@ export const startElectionScheduler = () => {
           },
         },
         data: {
-          status: "ENDED",
+          status: "CLOSED",
         },
       });
 
