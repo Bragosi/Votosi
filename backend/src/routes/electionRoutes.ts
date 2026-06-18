@@ -8,6 +8,7 @@ import { CreateCandidate } from "../controllers/electionControllers/CreateCandid
 import { upload } from "../middleware/upload.js";
 import { GetCandidatesInElection } from "../controllers/electionControllers/GetCandidatesInElection.js";
 import { DeleteCandidate } from "../controllers/electionControllers/DeleteCandidate.js";
+import { GetCandidateById } from "../controllers/electionControllers/GetCandidateById.js";
 
 const router = express.Router();
 router.post("/createElection", protectRoute, CreateElection);
@@ -17,5 +18,6 @@ router.put("/editElection/:electionId", protectRoute, EditElection);
 router.post("/createCandidate/:electionId/candidate", protectRoute, upload.single("profilePicture"), CreateCandidate);
 router.get("/getCandidatesInElection/:electionId", GetCandidatesInElection); 
 router.delete("/deleteCandidate/:candidateId", protectRoute, DeleteCandidate);
+router.get("/getCandidateById/:candidateId", GetCandidateById); 
 export default router;
 

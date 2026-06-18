@@ -4,12 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useElectionStore } from "@/app/store/useElectionStore";
 import { EmptyState } from "@/components/general/EmptyState";
-import {
-  Loader2,
-  Pencil,
-  Calendar,
-  PlusCircleIcon,
-} from "lucide-react";
+import { Loader2, Pencil, Calendar, PlusCircleIcon } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import DeleteElection from "./_components/DeleteElection";
@@ -65,12 +60,8 @@ export default function Election() {
       {/* Stats */}
       <div className="flex flex-col">
         <Card className="p-5 w-full">
-          <p className="text-sm text-muted-foreground">
-            Total Elections
-          </p>
-          <h2 className="mt-2 text-3xl font-bold">
-            {safeElections.length}
-          </h2>
+          <p className="text-sm text-muted-foreground">Total Elections</p>
+          <h2 className="mt-2 text-3xl font-bold">{safeElections.length}</h2>
         </Card>
       </div>
 
@@ -123,13 +114,21 @@ export default function Election() {
                     <Calendar className="size-4 shrink-0" />
 
                     <span className="wrap-break-word">
-                      {new Date(
-                        election.startDate
-                      ).toLocaleDateString()}{" "}
-                      →{" "}
-                      {new Date(
-                        election.endDate
-                      ).toLocaleDateString()}
+                      {new Date(election.startDate).toLocaleString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                      {" → "}
+                      {new Date(election.endDate).toLocaleString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </span>
                   </div>
 

@@ -51,27 +51,27 @@ export default function DeleteElection({ election }: { election: Election }) {
           </AlertDialogTitle>
 
           <AlertDialogDescription className="space-y-3">
-            <p>
+            <div>
               You are about to permanently delete{" "}
               <span className="font-semibold text-primary">
                 {election.title}
               </span>
               . This action cannot be undone.
-            </p>
+            </div>
 
-            <p>
+            <div>
               This election is scheduled to end on{" "}
               <span className="font-medium">
                 {new Date(election.endDate).toLocaleString()}
               </span>
-            </p>
+            </div>
 
-            <p>
+            <div>
               Total Votes:{" "}
               <span className="font-semibold text-primary">
                 {election._count?.votes ?? 0}
               </span>
-            </p>
+            </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
 

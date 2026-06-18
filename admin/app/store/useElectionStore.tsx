@@ -40,6 +40,9 @@ type ElectionStore = {
   GetCandidatesInElections: (electionId: string) => Promise<any[]>;
   isDeletingCandidate: boolean;
   DeleteCandidate: (candidateId: string) => Promise<boolean>;
+  isGettingCandidate: boolean;
+  candidate: any | null;
+  GetCandidateById: (candidateId: string) => Promise<any>;
 };
 
 export const useElectionStore = create<ElectionStore>((set) => ({
@@ -52,6 +55,8 @@ export const useElectionStore = create<ElectionStore>((set) => ({
   isGettingCandidatesInElection: false,
   CandidatesInElection: [],
   isDeletingCandidate: false,
+  isGettingCandidate: false,
+  candidate: null,
 
   createElection: async (data) => {
     try {
@@ -206,6 +211,29 @@ export const useElectionStore = create<ElectionStore>((set) => ({
       return false;
     } finally {
       set({ isDeletingCandidate: false });
+    }
+  },
+  GetCandidateById: async (candidateId: string) => {
+    try {
+      set({ isGettingCandidate: true });
+
+      const res = await axiosInstance.get(
+        `/election/getCandidateById/${candidateId}`,
+      );
+
+      set({
+        candidate: res.data.data,
+      });
+
+      return res.data.data;
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to fetch candidate");
+
+      return null;
+    } finally {
+      set({
+        isGettingCandidate: false,
+      });
     }
   },
 }));

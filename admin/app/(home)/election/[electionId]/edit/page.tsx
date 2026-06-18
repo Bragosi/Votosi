@@ -22,7 +22,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import EditElectionForm from "./_components/EditElectionForm";
 import { EmptyState } from "@/components/general/EmptyState";
-import ElectionCandidates from "./_components/ElectionCandidates";
 import ElectionCandidateCard from "./_components/ElectionCandidateCard";
 
 export default function EditElectionPage() {

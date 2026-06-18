@@ -2,14 +2,26 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import { toast } from "sonner";
 
-type AuthUser = {
-  id: string;
+
+type Profile = {
+  firstName: string;
+  surname: string;
+  otherName?: string | null;
   email: string;
-  role: "admin" | "user";
+  profilePicture?: string | null;
+  DOB: string; // or Date if you convert it on frontend
+  sex: "male" | "female" | "other";
+  maritalStatus: "single" | "married" | "divorced" | "widowed";
+  state: string;
+  LGA: string;
+  education: string;
+  residentialAddress: string;
+  adminId: string;
+  role: "Admin" | "OFFICER" | "vOTER";
 };
 
 type AuthStore = {
-  authUser: AuthUser | null;
+  authUser: Profile | null;
   isCheckingAuth: boolean;
   isLoggingIn: boolean;
   isRegisteringOfficer: boolean;
@@ -44,6 +56,9 @@ type AuthStore = {
   voters: any[];
   DeleteOfficers: (officerId: string) => Promise<boolean>;
   DeleteVoter: (voterId: string) => Promise<boolean>;
+  isGettingAdmin: boolean;
+  getMeAdmin: () => Promise<boolean>;
+  profile: Profile | null;
 };
 
 export const useAuthStore = create<AuthStore>((set) => ({
@@ -59,6 +74,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
   isDeletingOfficers: false,
   isDeletingVoter: false,
   isActivatingAccount: false,
+  isGettingAdmin: false,
+  profile: null,
 
   activateAdminAccount: async (data) => {
     try {
@@ -90,9 +107,9 @@ export const useAuthStore = create<AuthStore>((set) => ({
       const res = await axiosInstance.post("/admin/adminLogin", data);
 
       set({ authUser: res.data.data });
+      await useAuthStore.getState().getMeAdmin();
 
       toast.success("Login successful");
-
       return true;
     } catch (error: any) {
       console.log("Error in adminLogin", error);
@@ -260,6 +277,25 @@ export const useAuthStore = create<AuthStore>((set) => ({
       return false;
     } finally {
       set({ isDeletingVoter: false });
+    }
+  },
+  getMeAdmin: async () => {
+    try {
+      set({ isGettingAdmin: true });
+
+      const res = await axiosInstance.get("/admin/getMeAdmin");
+
+      set({ profile: res.data.user ?? res.data });
+
+      return true;
+    } catch (error: any) {
+      console.log("Error fetching admin profile", error);
+
+      set({ profile: null });
+
+      return false;
+    } finally {
+      set({ isGettingAdmin: false });
     }
   },
 }));

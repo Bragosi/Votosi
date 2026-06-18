@@ -1,18 +1,15 @@
 import { Request, Response } from "express";
 import { prisma } from "../../lib/prisma.js";
 
+interface Params {
+  electionId: string;
+}
+
 export const GetCandidateInElectionMobileSide = async (
-  req: Request,
+  req: Request<Params>,
   res: Response,
 ) => {
   const { electionId } = req.params;
-
-  if (!electionId || typeof electionId !== "string") {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid election ID",
-    });
-  }
 
   try {
     const data = await prisma.candidate.findMany({
@@ -28,11 +25,11 @@ export const GetCandidateInElectionMobileSide = async (
         imageUrl: true,
         bio: true,
         electionId: true,
-        _count:{
-            select:{
-                votes:true
-            }
-        }
+        _count: {
+          select: {
+            votes: true,
+          },
+        },
       },
     });
 

@@ -19,12 +19,8 @@ import {
 } from "@/components/ui/sidebar";
 import {
   EllipsisVerticalIcon,
-  CircleUserRoundIcon,
-  CreditCardIcon,
-  BellIcon,
   LogOutIcon,
 } from "lucide-react";
-import { Button } from "./ui/button";
 
 export function NavUser({
   user,
@@ -36,7 +32,7 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
-  const { logout, authUser } = useAuthStore();
+  const { logout} = useAuthStore();
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -81,18 +77,6 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <CircleUserRoundIcon />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCardIcon />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <BellIcon />
-                Notifications
-              </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout}>

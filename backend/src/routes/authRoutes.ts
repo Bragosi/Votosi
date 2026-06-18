@@ -12,6 +12,8 @@ import { DeleteOfficer } from "../controllers/ManageUser/DeleteOfficer.js";
 import { DeleteVoter } from "../controllers/ManageUser/DeleteVoter.js";
 import { ActivateAdminAccount } from "../controllers/authControllers/ActivateAdminAccount.js";
 import { AdminLogin } from "../controllers/authControllers/AdminLogin.js";
+import { getMeAdmin } from "../controllers/ManageUser/GetMeAdmin.js";
+
 
 const router = express.Router();
 router.post("/adminLogin", AdminLogin);
@@ -28,4 +30,6 @@ router.get("/getRegisteredVoters", GetRegisteredVoters);
 router.delete("/deleteOfficer/:officerId", DeleteOfficer);
 router.delete("/deleteVoter/:voterId", DeleteVoter);
 router.post("/activateAdminAccount", ActivateAdminAccount);
+router.get("/getMeAdmin", protectRoute, getMeAdmin)
+
 export default router;

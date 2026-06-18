@@ -6,6 +6,8 @@ import { GetVoterElection } from "../controllers/electionControllers/GetVotersEl
 import { GetCandidateInElectionMobileSide } from "../controllers/electionControllers/GetCandidateInElectionMobileSide.js";
 import { GetSingleCandidateDetails } from "../controllers/electionControllers/GetSingleCandidateDetails.js";
 import { CastVote } from "../controllers/electionControllers/CastVote.js";
+import { getMeVoter } from "../controllers/ManageUser/GetMeVoter.js";
+import { protectRoute } from "../middleware/protectRoute.js";
 
 const router = express.Router();
 router.post("/voterLogin", VoterLogin);
@@ -15,4 +17,5 @@ router.get("/elections", GetVoterElection);
 router.get("/candidates/:electionId", GetCandidateInElectionMobileSide)
 router.get("/elections/:electionId/candidates/:candidateId", GetSingleCandidateDetails )
 router.post("/castVote/:candidateId", CastVote)
+router.get("/getMeVoter", protectRoute, getMeVoter)
 export default router;

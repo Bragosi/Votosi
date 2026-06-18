@@ -7,8 +7,6 @@ import { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Pencil,
-  Trash2,
   PlusCircleIcon,
   Vote,
   User,
@@ -166,7 +164,7 @@ export default function ElectionCandidateCard({ electionId }: Props) {
                       className: "w-full mt-4 items-center justify-center",
                     })}
                   >
-                    Edit Candidate <ArrowRight className="size-4"/>
+                    Edit Candidate <ArrowRight className="size-4" />
                   </Link>
                 </CardContent>
               </Card>
