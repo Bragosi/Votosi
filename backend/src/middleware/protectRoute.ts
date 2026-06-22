@@ -1,15 +1,13 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { prisma } from "../lib/prisma.js";
+import { AuthRequest } from "../lib/authType.js";
 
-interface AuthRequest extends Request {
-  user?: any;
-}
 
 export const protectRoute = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const token = req.cookies?.jwt;
@@ -27,17 +25,21 @@ export const protectRoute = async (
     }
 
     const user = await prisma.admin.findUnique({
-      where: {
-        id: decoded.userId,
+      where: { id: decoded.userId },
+      select: {
+        id: true,
+        role: true,
       },
     });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    console.log("COOKIES:", req.cookies);
-    console.log("HEADERS:", req.headers.authorization);
-    req.user = user;
+
+    req.user = {
+      id: user.id,
+      role: user.role as "ADMIN" | "OFFICER" | "VOTER",
+    };
 
     next();
   } catch (error: any) {

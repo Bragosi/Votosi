@@ -9,7 +9,7 @@ type Profile = {
   otherName?: string | null;
   email: string;
   profilePicture?: string | null;
-  DOB: string; // or Date if you convert it on frontend
+  DOB: string;
   sex: "male" | "female" | "other";
   maritalStatus: "single" | "married" | "divorced" | "widowed";
   state: string;
@@ -17,7 +17,7 @@ type Profile = {
   education: string;
   residentialAddress: string;
   adminId: string;
-  role: "Admin" | "OFFICER" | "vOTER";
+  role: "ADMIN" | "OFFICER" | "VOTER";
 };
 
 type AuthStore = {

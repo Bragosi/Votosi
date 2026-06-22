@@ -13,22 +13,19 @@ import { DeleteVoter } from "../controllers/ManageUser/DeleteVoter.js";
 import { ActivateAdminAccount } from "../controllers/authControllers/ActivateAdminAccount.js";
 import { AdminLogin } from "../controllers/authControllers/AdminLogin.js";
 import { getMeAdmin } from "../controllers/ManageUser/GetMeAdmin.js";
+import { adminOnly } from "../middleware/adminMiddleWare.js";
 
 
 const router = express.Router();
 router.post("/adminLogin", AdminLogin);
 router.post("/logout", logout);
-router.post(
-  "/registerOfficer",
-  upload.single("profilePicture"),
-  RegisterOfficer,
-);
+router.post( "/registerOfficer", protectRoute, adminOnly, upload.single("profilePicture"), RegisterOfficer,);
 router.get("/check", protectRoute, checkAuth);
-router.post("/registerVoter", upload.single("profilePicture"), RegisterVoter);
+router.post("/registerVoter", protectRoute, upload.single("profilePicture"), RegisterVoter);
 router.get("/getRegisteredOfficers", GetRegisteredOfficers);
 router.get("/getRegisteredVoters", GetRegisteredVoters);
-router.delete("/deleteOfficer/:officerId", DeleteOfficer);
-router.delete("/deleteVoter/:voterId", DeleteVoter);
+router.delete("/deleteOfficer/:officerId", protectRoute, adminOnly, DeleteOfficer);
+router.delete("/deleteVoter/:voterId", protectRoute, adminOnly, DeleteVoter);
 router.post("/activateAdminAccount", ActivateAdminAccount);
 router.get("/getMeAdmin", protectRoute, getMeAdmin)
 

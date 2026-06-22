@@ -116,10 +116,10 @@ export default function RegisterVoterForm() {
         {/* HEADER */}
         <CardHeader className="space-y-2 text-center sm:text-left">
           <CardTitle className="text-xl sm:text-2xl">
-            Register Officer
+            Register Voter
           </CardTitle>
           <CardDescription>
-            Add a new election officer and grant them access to the Votosi
+            Add a new Citizen and give them access to vote
             system.
           </CardDescription>
         </CardHeader>
@@ -381,7 +381,7 @@ export default function RegisterVoterForm() {
                     Registering...
                   </>
                 ) : (
-                  "Register Officer"
+                  "Register Voter"
                 )}
               </Button>
             </form>
