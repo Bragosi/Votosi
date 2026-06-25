@@ -321,7 +321,7 @@ export default function RegisterVoterForm() {
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="PRIMARY">Primary</SelectItem>
-                          <SelectItem value="SECONDARY">Secondary</SelectItem>
+                           <SelectItem value="SECONDARY">Secondary</SelectItem>
                           <SelectItem value="TERTIARY">Tertiary</SelectItem>
                         </SelectContent>
                       </Select>
@@ -336,7 +336,7 @@ export default function RegisterVoterForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>State</FormLabel>
-                      <FormControl>
+                      <FormControl> 
                         <Input placeholder="e.g. Lagos" {...field} />
                       </FormControl>
                       <FormMessage />

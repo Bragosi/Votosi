@@ -2,7 +2,7 @@
 
 import { useElectionStore } from "@/app/store/useElectionStore";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -53,39 +53,37 @@ export default function ElectionCandidateCard({ electionId }: Props) {
 
   if (isGettingCandidatesInElection) {
     return (
-      <div className="flex flex-col items-center justify-center text-center">
-        <Loader2 className="animate-spin tex-4 text-primary" />
-        fetching candidates...
+      <div className="flex flex-col items-center justify-center py-20 text-center">
+        <Loader2 className="size-8 animate-spin text-primary mb-2" />
+        <p className="text-muted-foreground">Fetching candidates...</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* HEADER (same pattern as lecturer cards page header) */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Candidates</h2>
+    <div className="space-y-8">
+      {/* HEADER */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="text-2xl font-bold tracking-tight">Candidates</h2>
 
         <Link
           href={`/election/${electionId}/candidate`}
           className={buttonVariants()}
         >
-          <PlusCircleIcon className="size-4 mr-2" />
+          <PlusCircleIcon className="mr-2 size-4" />
           Add Candidate
         </Link>
       </div>
 
-      {/* EMPTY STATE */}
       {safeCandidates.length === 0 ? (
         <EmptyState
-          title="No Candidate have been added"
-          description="Add a candidate to elelction"
+          title="No Candidates Added"
+          description="Add a candidate to this election."
           buttonText="Add Candidate"
           href={`/election/${electionId}/candidate`}
         />
       ) : (
-        /* GRID (same spacing philosophy as lecturer cards grid) */
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           {safeCandidates.map((candidate: Candidate) => {
             const fullName = `${candidate.surname} ${candidate.firstName} ${
               candidate.otherName || ""
@@ -94,23 +92,29 @@ export default function ElectionCandidateCard({ electionId }: Props) {
             return (
               <Card
                 key={candidate.id}
-                className="relative overflow-hidden group hover:shadow-xl transition-all duration-300 border-muted py-0 gap-0"
+                className="group overflow-hidden py-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
-                {/* IMAGE (exact lecturer style) */}
-                <div className="relative aspect-video overflow-hidden">
+                {/* IMAGE */}
+                <div className="relative h-64 overflow-hidden">
                   <Image
                     src={candidate.imageUrl || "/placeholder.png"}
                     alt={fullName}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
 
-                  {/* VOTE BADGE */}
-                  <div className="absolute bottom-2 right-2 text-primary text-lg px-2 py-1 rounded-md flex items-center gap-1">
-                    <Vote className="size-6" />
-                    {candidate._count?.votes ?? 0}
+                  {/* VOTES */}
+                  <div className="absolute right-3 top-3 rounded-full bg-background/95 px-3 py-1.5 shadow-md backdrop-blur">
+                    <div className="flex items-center gap-1.5">
+                      <Vote className="size-4 text-primary" />
+                      <span className="text-sm font-semibold">
+                        {candidate._count?.votes ?? 0}
+                      </span>
+                    </div>
                   </div>
-                  <div className="absolute bottom-2 left-2 text-primary text-lg px-2 py-1 rounded-md flex items-center gap-1">
+
+                  {/* DELETE */}
+                  <div className="absolute left-3 top-3">
                     <DeleteCandidate
                       candidate={{
                         id: candidate.id,
@@ -126,46 +130,83 @@ export default function ElectionCandidateCard({ electionId }: Props) {
                 </div>
 
                 {/* CONTENT */}
-                <CardContent className="p-4">
-                  {/* NAME */}
-                  <div className="flex items-center gap-1 font-semibold text-lg line-clamp-1 hover:text-primary transition-colors text-muted-foreground">
-                    <User className="size-4 text-primary" /> Name:{" "}
-                    <span className="text-primary">{fullName}</span>
-                  </div>
+                <CardContent className="p-6">
+                  <div className="space-y-4">
+                    {/* NAME */}
+                    <div>
+                      <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
+                        <User className="size-3.5" />
+                        Candidate Name
+                      </div>
 
-                  {/* PARTY */}
-                  <div className="flex items-center mt-2 gap-1 text-lg font-semibold  text-muted-foreground line-clamp-1">
-                    <Flag className="size-4 text-primary" />
-                    Party:{" "}
-                    <span className="text-primary">
-                      {typeof candidate.party === "object"
-                        ? candidate.party?.name
-                        : candidate.party || "Independent"}
-                    </span>
-                  </div>
+                      <p className="mt-1 text-lg font-semibold line-clamp-2">
+                        {fullName}
+                      </p>
+                    </div>
 
-                  <div className="flex items-center gap-2 mt-1 text-lg  text-muted-foreground font-semibold">
-                    <Venus className="text-primary size-4" />
-                    Sex:
-                    <span className="text-lg text-primary capitalize">
-                      {candidate.sex}
-                    </span>
-                  </div>
+                    {/* PARTY */}
+                    <div className="flex items-center gap-3">
+                      <div className="rounded-md bg-primary/10 p-2">
+                        <Flag className="size-4 text-primary" />
+                      </div>
 
-                  <div className="flex items-center gap-2 mt-1 text-muted-foreground font-semibold text-lg">
-                    <MapPin className="text-primary size-4" />
-                    State of origin :
-                    <span className="text-primary">{candidate.state}</span>
-                  </div>
+                      <div>
+                        <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                          Party
+                        </p>
 
-                  <Link
-                    href={`/election/${electionId}/candidate/${candidate.id}/edit`}
-                    className={buttonVariants({
-                      className: "w-full mt-4 items-center justify-center",
-                    })}
-                  >
-                    Edit Candidate <ArrowRight className="size-4" />
-                  </Link>
+                        <p className="font-medium">
+                          {typeof candidate.party === "object"
+                            ? candidate.party?.name
+                            : candidate.party || "Independent"}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* SEX */}
+                    <div className="flex items-center gap-3">
+                      <div className="rounded-md bg-primary/10 p-2">
+                        <Venus className="size-4 text-primary" />
+                      </div>
+
+                      <div>
+                        <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                          Gender
+                        </p>
+
+                        <p className="font-medium capitalize">
+                          {candidate.sex}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* STATE */}
+                    <div className="flex items-center gap-3">
+                      <div className="rounded-md bg-primary/10 p-2">
+                        <MapPin className="size-4 text-primary" />
+                      </div>
+
+                      <div>
+                        <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                          State of Origin
+                        </p>
+
+                        <p className="font-medium">{candidate.state}</p>
+                      </div>
+                    </div>
+
+                    {/* BUTTON */}
+                    <Link
+                      href={`/election/${electionId}/candidate/${candidate.id}/edit`}
+                      className={buttonVariants({
+                        className:
+                          "w-full mt-6 flex items-center justify-center gap-2",
+                      })}
+                    >
+                      Edit Candidate
+                      <ArrowRight className="size-4" />
+                    </Link>
+                  </div>
                 </CardContent>
               </Card>
             );

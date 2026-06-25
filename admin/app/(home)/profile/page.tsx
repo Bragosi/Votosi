@@ -1,10 +1,26 @@
+
 "use client";
 
 import { useAuthStore } from "@/app/store/useAuthStore";
 import { useEffect } from "react";
 import Image from "next/image";
-import { Loader2 } from "lucide-react";
+import {
+  Loader2,
+  Mail,
+  User,
+  MapPin,
+  GraduationCap,
+  Heart,
+  Calendar,
+  Shield,
+} from "lucide-react";
 import { EmptyState } from "@/components/general/EmptyState";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function Profile() {
   const { isGettingAdmin, profile, getMeAdmin } = useAuthStore();
@@ -15,13 +31,8 @@ export default function Profile() {
 
   if (isGettingAdmin) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-          <p className="text-gray-500 font-medium animate-pulse">
-            <Loader2 className="animate-spin size-6 text-primary" />
-          </p>
-        </div>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="size-10 animate-spin text-primary" />
       </div>
     );
   }
@@ -42,54 +53,63 @@ export default function Profile() {
   }${profile.surname}`;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto space-y-10">
-        <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          {/* Profile Row */}
-          <div className="px-8 pb-8 -mt-16 flex flex-col sm:flex-row items-center sm:items-end gap-6">
-            {/* Avatar */}
-            <div className="relative w-32 h-32 rounded-full border-4 border-white shadow-md overflow-hidden bg-white">
-              <Image
-                src={profile.profilePicture || "/placeholder.png"}
-                alt={fullName}
-                fill
-                className="object-cover"
-                unoptimized
-              />
+    <div className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto space-y-8">
+        {/* ================= PROFILE HEADER ================= */}
+        <div className="flex flex-col md:flex-row items-center md:items-end gap-6">
+          <div className="relative w-36 h-36 rounded-full overflow-hidden border-4 border-border shadow-lg">
+            <Image
+              src={profile.profilePicture || "/placeholder.png"}
+              alt={fullName}
+              fill
+              className="object-cover"
+              unoptimized
+            />
+          </div>
+
+          <div className="flex-1 text-center md:text-left space-y-3">
+            <div className="flex flex-col md:flex-row md:items-center gap-3">
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+                {fullName}
+              </h1>
+
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20 w-fit mx-auto md:mx-0">
+                <Shield className="size-4" />
+                {profile.role}
+              </span>
             </div>
 
-            {/* Info */}
-            <div className="text-center sm:text-left space-y-2 flex-1">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                <h1 className="text-3xl font-bold text-primary">{fullName}</h1>
-
-                <span className="px-3 py-1 text-xs font-semibold rounded-full bg-primary/10 text-mauve-50 border border-indigo-200 w-fit mx-auto sm:mx-0">
-                  {profile.role}
-                </span>
+            <div className="flex flex-col gap-2 text-muted-foreground">
+              <div className="flex items-center justify-center md:justify-start gap-2">
+                <User className="size-4" />
+                <span className="font-mono">{profile.adminId}</span>
               </div>
 
-              <p className="text-sm text-primary">
-                ID:{" "}
-                <span className="font-mono text-muted-foreground">
-                  {profile.adminId}
-                </span>
-              </p>
-
-              <p className="text-sm text-primary">{profile.email}</p>
+              <div className="flex items-center justify-center md:justify-start gap-2">
+                <Mail className="size-4" />
+                <span>{profile.email}</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* LEFT CARD */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-6">
-            <h3 className="text-lg font-semibold text-primary border-b pb-3">
-              Personal Details
-            </h3>
+        {/* ================= DETAILS ================= */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* PERSONAL DETAILS */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Personal Details</CardTitle>
+            </CardHeader>
 
-            <div className="space-y-5">
-              <Info label="Gender:" value={profile.sex?.toLowerCase()} />
+            <CardContent className="space-y-6">
               <Info
+                icon={<User className="size-4" />}
+                label="Gender"
+                value={profile.sex}
+              />
+
+              <Info
+                icon={<Calendar className="size-4" />}
                 label="Date of Birth"
                 value={new Date(profile.DOB).toLocaleDateString("en-US", {
                   year: "numeric",
@@ -97,53 +117,83 @@ export default function Profile() {
                   day: "numeric",
                 })}
               />
+
               <Info
+                icon={<Heart className="size-4" />}
                 label="Marital Status"
-                value={profile.maritalStatus?.toLowerCase()}
+                value={profile.maritalStatus}
               />
+
               <Info
+                icon={<GraduationCap className="size-4" />}
                 label="Education Level"
-                value={profile.education?.toLowerCase()}
+                value={profile.education}
               />
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
-          {/* RIGHT CARD */}
-          <div className="md:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-6">
-            <h3 className="text-lg font-semibold text-primary border-b pb-3">
-              Contact & Regional Information
-            </h3>
+          {/* CONTACT INFORMATION */}
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle>Contact & Regional Information</CardTitle>
+            </CardHeader>
 
-            <div className="space-y-6">
+            <CardContent className="space-y-6">
               <div>
-                <p className="text-xs font-semibold text-primary uppercase tracking-wide">
-                  Residential Address
-                </p>
-                <div className="mt-2 p-4 bg-gray-50 rounded-xl border text-gray-800 text-sm">
+                <div className="flex items-center gap-2 mb-3">
+                  <MapPin className="size-4 text-primary" />
+                  <p className="text-sm font-medium">
+                    Residential Address
+                  </p>
+                </div>
+
+                <div className="rounded-lg border bg-muted/30 p-4 text-sm">
                   {profile.residentialAddress}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <Info label="LGA" value={profile.LGA} />
-                <Info label="State" value={profile.state} />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Info
+                  icon={<MapPin className="size-4" />}
+                  label="LGA"
+                  value={profile.LGA}
+                />
+
+                <Info
+                  icon={<MapPin className="size-4" />}
+                  label="State"
+                  value={profile.state}
+                />
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
   );
 }
 
-/* ================= REUSABLE COMPONENT ================= */
-function Info({ label, value }: { label: string; value: any }) {
+function Info({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value: any;
+  icon?: React.ReactNode;
+}) {
   return (
-    <div className="space-y-1">
-      <p className="text-xs font-semibold text-primary uppercase tracking-wide">
-        {label}
+    <div className="space-y-2">
+      <div className="flex items-center gap-2 text-muted-foreground">
+        {icon}
+        <p className="text-xs uppercase tracking-wider font-semibold">
+          {label}
+        </p>
+      </div>
+
+      <p className="text-sm font-medium capitalize">
+        {value || "Not Provided"}
       </p>
-      <p className="text-sm font-medium text-gray-800 capitalize">{value}</p>
     </div>
   );
 }

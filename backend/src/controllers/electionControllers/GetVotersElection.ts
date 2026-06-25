@@ -3,26 +3,28 @@ import { prisma } from "../../lib/prisma.js";
 
 export const GetVoterElection = async (req: Request, res: Response) => {
   try {
-    const data = await prisma.election.findMany({
+
+
+const data = await prisma.election.findMany({
+  where: {
+    status: {
+      not: "DRAFT",
+    },
+  },
+  select: {
+    id: true,
+    title: true,
+    description: true,
+    startDate: true,
+    endDate: true,
+    status: true,
+    _count: {
       select: {
-        where: {
-          status: {
-            not: "DRAFT",
-          },
-        },
-        id: true,
-        title: true,
-        description: true,
-        startDate: true,
-        endDate: true,
-        status: true,
-        _count:{
-          select:{
-            votes : true
-          }
-        }
+        votes: true,
       },
-    });
+    },
+  },
+});
 
     return res.status(200).json({
       success: true,

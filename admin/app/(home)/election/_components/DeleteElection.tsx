@@ -25,7 +25,11 @@ type Election = {
   };
 };
 
-export default function DeleteElection({ election }: { election: Election }) {
+export default function DeleteElection({
+  election,
+}: {
+  election: Election;
+}) {
   const { DeleteElection, isDeletingElection } = useElectionStore();
   const [open, setOpen] = useState(false);
 
@@ -36,10 +40,11 @@ export default function DeleteElection({ election }: { election: Election }) {
       setOpen(false);
     }
   };
+
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" size="icon">
           <Trash2 className="size-4 text-destructive" />
         </Button>
       </AlertDialogTrigger>
@@ -50,29 +55,31 @@ export default function DeleteElection({ election }: { election: Election }) {
             Delete Election
           </AlertDialogTitle>
 
-          <AlertDialogDescription className="space-y-3">
-            <div>
-              You are about to permanently delete{" "}
-              <span className="font-semibold text-primary">
-                {election.title}
-              </span>
-              . This action cannot be undone.
-            </div>
+          <div className="space-y-3 text-sm text-muted-foreground">
+            <AlertDialogDescription asChild>
+              <p>
+                You are about to permanently delete{" "}
+                <span className="font-semibold text-primary">
+                  {election.title}
+                </span>
+                . This action cannot be undone.
+              </p>
+            </AlertDialogDescription>
 
-            <div>
+            <p>
               This election is scheduled to end on{" "}
-              <span className="font-medium">
+              <span className="font-medium text-foreground">
                 {new Date(election.endDate).toLocaleString()}
               </span>
-            </div>
+            </p>
 
-            <div>
+            <p>
               Total Votes:{" "}
               <span className="font-semibold text-primary">
                 {election._count?.votes ?? 0}
               </span>
-            </div>
-          </AlertDialogDescription>
+            </p>
+          </div>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
@@ -86,10 +93,10 @@ export default function DeleteElection({ election }: { election: Election }) {
             disabled={isDeletingElection}
           >
             {isDeletingElection ? (
-              <div className="flex items-center gap-2">
-                <Loader2 className="animate-spin size-4" />
+              <>
+                <Loader2 className="mr-2 size-4 animate-spin" />
                 Deleting...
-              </div>
+              </>
             ) : (
               "Delete Election"
             )}
