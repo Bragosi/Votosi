@@ -16,6 +16,6 @@ router.post("/activateVoterAccount", ActivateVoterAccount);
 router.get("/elections", GetVoterElection);
 router.get("/candidates/:electionId", GetCandidateInElectionMobileSide)
 router.get("/elections/:electionId/candidates/:candidateId", GetSingleCandidateDetails )
-router.post("/castVote/:candidateId", CastVote)
+router.post("/castVote/:candidateId", protectRoute, CastVote)
 router.get("/getMeVoter", protectRoute, getMeVoter)
 export default router;

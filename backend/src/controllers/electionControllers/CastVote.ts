@@ -5,19 +5,18 @@ interface AuthenticatedUser {
   id: string;
 }
 
-interface Params {
-  candidateId: string;
-}
-
-export interface AuthenticatedRequest extends Request<Params> {
+interface AuthenticatedRequest extends Request {
   user?: AuthenticatedUser;
+  params: {
+    candidateId: string;
+  };
 }
 
 export const CastVote = async (
   req: AuthenticatedRequest,
   res: Response
 ) => {
-  try { 
+  try {
     const { candidateId } = req.params;
     const voterId = req.user?.id;
 
@@ -45,6 +44,14 @@ export const CastVote = async (
     }
 
     const election = candidate.election;
+
+    if (!election) {
+      return res.status(404).json({
+        success: false,
+        message: "Election not found",
+      });
+    }
+
     const now = new Date();
 
     if (now < election.startDate) {
@@ -98,4 +105,4 @@ export const CastVote = async (
       message: "Internal server error",
     });
   }
-}; 
+};
