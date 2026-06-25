@@ -23,6 +23,17 @@ export const VoterLogin = async (req: Request, res: Response) => {
         voterId: true,
         password: true,
         isActivated: true,
+        firstName: true,
+        surname: true,
+        otherName: true,
+        profilePicture: true,
+        DOB: true,
+        sex: true,
+        maritalStatus: true,
+        state: true,
+        LGA: true,
+        education: true,
+        residentialAddress: true,
       },
     });
 

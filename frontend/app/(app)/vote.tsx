@@ -20,6 +20,7 @@ import { GlassCard } from '@/components';
 import { useElectionStore } from '@/store/useElectionStore';
 import { Colors, FontSizes, Spacing, BorderRadius } from '@/constants/Colors';
 import { Election, ElectionStatus } from '@/services/electionService';
+import { extractPlainText } from '@/utils/richText';
 
 const STATUS_CONFIG: Record<ElectionStatus, { label: string; color: string; bg: string; icon: keyof typeof Ionicons.glyphMap }> = {
   ACTIVE:   { label: 'Live',     color: Colors.success, bg: 'rgba(16,185,129,0.12)', icon: 'radio-button-on' },
@@ -48,7 +49,9 @@ function ElectionCard({ election, onPress }: { election: Election; onPress: () =
 
         <Text style={styles.electionTitle} numberOfLines={2}>{election.title}</Text>
         {election.description ? (
-          <Text style={styles.electionDesc} numberOfLines={2}>{election.description}</Text>
+          <Text style={styles.electionDesc} numberOfLines={2}>
+            {extractPlainText(election.description)}
+          </Text>
         ) : null}
 
         <View style={styles.dateBadges}>
@@ -60,6 +63,12 @@ function ElectionCard({ election, onPress }: { election: Election; onPress: () =
             <Ionicons name="calendar" size={14} color={Colors.textMuted} />
             <Text style={styles.dateText}>Ends {end}</Text>
           </View>
+          {typeof election._count?.votes === 'number' && (
+            <View style={styles.dateItem}>
+              <Ionicons name="people-outline" size={14} color={Colors.textMuted} />
+              <Text style={styles.dateText}>{election._count.votes} votes</Text>
+            </View>
+          )}
         </View>
 
         {isVotable && (

@@ -14,7 +14,7 @@ const getBaseUrl = (): string => {
       return 'http://localhost:5000';      // iOS simulator only
     }
     // Android physical device + Android emulator (change 10.0.2.2 for emulator)
-    return 'http://192.168.0.101:5000';   // ← your machine's LAN IP
+    return 'http://192.168.0.100:5000';   // ← your machine's LAN IP
   }
   return 'https://api.votosi.com';
 };

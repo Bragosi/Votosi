@@ -56,7 +56,7 @@ export default function ActivateScreen() {
     });
 
     if (success) {
-      router.replace('/(auth)/biometric');
+      router.replace('/(auth)/facial-verification');
     }
   };
 

@@ -1,7 +1,12 @@
 /**
  * Axios HTTP client configured for the Votosi backend.
- * Handles JWT token storage via expo-secure-store since
- * HTTP-only cookies don't work well in React Native.
+ *
+ * Auth strategy:
+ * - Backend sets JWT as an httpOnly cookie on login/activation.
+ * - We also extract the raw token value from the set-cookie header and
+ *   store it in SecureStore so we can attach it as Authorization: Bearer
+ *   on subsequent requests — necessary because React Native doesn't
+ *   automatically send cookies cross-request the way a browser does.
  */
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
@@ -12,41 +17,42 @@ const TOKEN_KEY = 'votosi_jwt';
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 15000,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor: attach token from secure store
+// ─── Request interceptor ────────────────────────────────────────────────────
+// Attach stored token as both Cookie header and Authorization header so
+// the backend's protectRoute (which reads req.cookies.jwt) finds it.
 apiClient.interceptors.request.use(
   async (config) => {
     const token = await SecureStore.getItemAsync(TOKEN_KEY);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      // Also send as cookie so cookie-parser on the backend picks it up
+      config.headers.Cookie = `jwt=${token}`;
     }
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// Response interceptor: extract & store token from Set-Cookie if present
+// ─── Response interceptor ───────────────────────────────────────────────────
+// Extract the JWT from set-cookie and persist it in SecureStore.
 apiClient.interceptors.response.use(
   async (response) => {
-    // The backend sends the JWT in the response cookie.
-    // In React Native, we need to extract it from response headers or body.
-    // Since we can't reliably get httpOnly cookies in RN, the token
-    // will be passed back in the response data or we handle it via
-    // cookie header parsing.
     const setCookie = response.headers['set-cookie'];
     if (setCookie) {
-      const jwtCookie = Array.isArray(setCookie)
-        ? setCookie.find((c) => c.startsWith('jwt='))
-        : setCookie.startsWith('jwt=')
+      const cookieStr = Array.isArray(setCookie)
+        ? setCookie.find((c: string) => c.startsWith('jwt='))
+        : typeof setCookie === 'string' && setCookie.startsWith('jwt=')
           ? setCookie
           : undefined;
 
-      if (jwtCookie) {
-        const token = jwtCookie.split('jwt=')[1]?.split(';')[0];
+      if (cookieStr) {
+        const token = cookieStr.split('jwt=')[1]?.split(';')[0];
         if (token) {
           await SecureStore.setItemAsync(TOKEN_KEY, token);
         }
@@ -56,7 +62,6 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401) {
-      // Token expired or invalid — will be handled by auth store
       SecureStore.deleteItemAsync(TOKEN_KEY);
     }
     return Promise.reject(error);

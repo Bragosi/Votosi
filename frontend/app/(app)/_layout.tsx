@@ -63,6 +63,9 @@ export default function AppLayout() {
       <Tabs.Screen name="elections/[electionId]/[candidateId]" options={{ href: null }} />
       {/* Support — accessed via dashboard quick action, not a persistent tab */}
       <Tabs.Screen name="support" options={{ href: null }} />
+      {/* Results — accessed via dashboard quick action or main links, not a persistent tab */}
+      <Tabs.Screen name="results" options={{ href: null }} />
+      <Tabs.Screen name="results/[electionId]" options={{ href: null }} />
     </Tabs>
   );
 }

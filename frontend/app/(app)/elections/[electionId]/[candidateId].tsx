@@ -20,6 +20,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { GlassCard, GradientButton } from '@/components';
 import { useElectionStore } from '@/store/useElectionStore';
 import { Colors, FontSizes, Spacing, BorderRadius } from '@/constants/Colors';
+import type { CandidateDetail } from '@/services/electionService';
+import { extractPlainText } from '@/utils/richText';
 
 const PARTY_COLORS: Record<string, string> = {
   APC:  '#10B981',
@@ -158,11 +160,11 @@ export default function CandidateDetailScreen() {
         </View>
 
         {/* Vote count */}
-        {typeof candidateDetail.voteCount === 'number' && (
+        {typeof candidateDetail._count?.votes === 'number' && (
           <View style={styles.voteCountCard}>
             <Ionicons name="bar-chart-outline" size={20} color={Colors.primary} />
             <Text style={styles.voteCountText}>
-              {candidateDetail.voteCount} vote{candidateDetail.voteCount !== 1 ? 's' : ''} so far
+              {candidateDetail._count.votes} vote{candidateDetail._count.votes !== 1 ? 's' : ''} so far
             </Text>
           </View>
         )}
@@ -170,7 +172,7 @@ export default function CandidateDetailScreen() {
         {/* Bio */}
         <GlassCard variant="elevated" style={styles.card}>
           <Text style={styles.cardTitle}>About</Text>
-          <Text style={styles.bio}>{candidateDetail.bio}</Text>
+          <Text style={styles.bio}>{extractPlainText(candidateDetail.bio)}</Text>
         </GlassCard>
 
         {/* Personal Info */}
@@ -188,18 +190,6 @@ export default function CandidateDetailScreen() {
           <InfoRow icon="location-outline" label="State" value={candidateDetail.state} />
           <InfoRow icon="map-outline"      label="LGA"   value={candidateDetail.LGA} />
         </GlassCard>
-
-        {/* Election info */}
-        {election && (
-          <GlassCard variant="elevated" style={styles.card}>
-            <Text style={styles.cardTitle}>Election</Text>
-            <Text style={styles.electionName}>{election.title}</Text>
-            <Text style={styles.electionDates}>
-              {new Date(election.startDate).toLocaleDateString('en-NG')} →{' '}
-              {new Date(election.endDate).toLocaleDateString('en-NG')}
-            </Text>
-          </GlassCard>
-        )}
 
         {/* Already voted banner */}
         {hasVoted ? (

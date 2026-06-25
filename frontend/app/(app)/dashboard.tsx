@@ -11,6 +11,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -39,14 +40,6 @@ const quickActions: QuickAction[] = [
     bgColor: Colors.primaryMuted,
   },
   {
-    id: 'history',
-    icon: 'time-outline',
-    title: 'Vote History',
-    subtitle: 'View past elections',
-    color: Colors.biometric,
-    bgColor: Colors.biometricMuted,
-  },
-  {
     id: 'results',
     icon: 'bar-chart-outline',
     title: 'Results',
@@ -67,7 +60,7 @@ const quickActions: QuickAction[] = [
 export default function DashboardScreen() {
   const router = useRouter();
   const voter = useAuthStore((s) => s.voter);
-  const { elections, fetchElections } = useElectionStore();
+  const { elections, fetchElections, votedElections } = useElectionStore();
 
   useEffect(() => { fetchElections(); }, []);
 
@@ -170,8 +163,31 @@ export default function DashboardScreen() {
               style={styles.actionCard}
               activeOpacity={0.7}
               onPress={() => {
-                if (action.id === 'vote') router.push('/(app)/vote');
-                if (action.id === 'support') router.push('/(app)/support');
+                if (action.id === 'vote') {
+                  router.push('/(app)/vote');
+                } else if (action.id === 'results') {
+                  router.push('/(app)/results');
+                } else if (action.id === 'support') {
+                  router.push('/(app)/support');
+                } else if (action.id === 'history') {
+                  const votedList = elections.filter((e) => votedElections[e.id]);
+                  if (votedList.length === 0) {
+                    Alert.alert(
+                      'Vote History',
+                      'You have not cast any votes in the current session yet.',
+                      [{ text: 'OK' }]
+                    );
+                  } else {
+                    const listString = votedList
+                      .map((e) => `• ${e.title}`)
+                      .join('\n');
+                    Alert.alert(
+                      'Vote History',
+                      `You have successfully voted in:\n\n${listString}`,
+                      [{ text: 'OK' }]
+                    );
+                  }
+                }
               }}
             >
               <View
