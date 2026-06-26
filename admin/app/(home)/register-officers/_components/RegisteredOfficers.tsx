@@ -8,17 +8,11 @@ import { Loader2 } from "lucide-react";
 import RevokeOfficerAccess from "./RevokeOfficerAccess";
 
 export default function RegisteredOfficers() {
-  const {
-    officers,
-    getRegisteredOfficers,
-    isGettingOfficers,
-  } = useAuthStore();
+  const { officers, getRegisteredOfficers, isGettingOfficers } = useAuthStore();
 
   useEffect(() => {
     getRegisteredOfficers();
   }, [getRegisteredOfficers]);
-
-
 
   return (
     <div className="w-full space-y-2">
@@ -61,7 +55,7 @@ export default function RegisteredOfficers() {
           </div>
 
           <div className="w-1/3 text-right">
-          <RevokeOfficerAccess officer={officer}/>
+            <RevokeOfficerAccess officer={officer} />
           </div>
         </div>
       ))}

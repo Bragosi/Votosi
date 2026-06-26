@@ -146,7 +146,11 @@ export default function CreateElectionForm() {
               />
 
               {/* SUBMIT */}
-              <Button disabled={isCreatingElection} type="submit" className="w-full">
+              <Button
+                disabled={isCreatingElection}
+                type="submit"
+                className="w-full"
+              >
                 {isCreatingElection ? (
                   <div className="flex items-center justify-center gap-2">
                     <Loader2 className="animate-spin size-4" />

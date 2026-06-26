@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import TextAlign from "@tiptap/extension-text-align";
 import { MenuBar } from "./MenuBar";
 
-
 export function RichTextEditor({ field }: { field: any }) {
   const [mounted, setMounted] = useState(false);
 
@@ -30,29 +29,28 @@ export function RichTextEditor({ field }: { field: any }) {
           "min-h-[300px] p-4 focus:outline-none prose prose-sm sm:prose lg:prose-lg xl:prose-xl dark:prose-invert !w-full !max-w-none",
       },
     },
-    content: "<p></p>", // ✅ NEVER bind field.value here
+    content: "<p></p>",
     onUpdate: ({ editor }) => {
       const json = editor.getJSON();
-      field.onChange(JSON.stringify(json)); // ✅ keep this
+      field.onChange(JSON.stringify(json));
     },
     immediatelyRender: false,
   });
 
-  // ✅ Sync external value → editor (VERY IMPORTANT)
-useEffect(() => {
-  if (!editor) return;
+  useEffect(() => {
+    if (!editor) return;
 
-  if (!field.value) {
-    editor.commands.setContent("<p></p>");
-    return;
-  }
-  try {
-    const parsed = JSON.parse(field.value);
-    editor.commands.setContent(parsed);
-  } catch {
-    editor.commands.setContent("<p></p>");
-  }
-}, [editor, field.value]);
+    if (!field.value) {
+      editor.commands.setContent("<p></p>");
+      return;
+    }
+    try {
+      const parsed = JSON.parse(field.value);
+      editor.commands.setContent(parsed);
+    } catch {
+      editor.commands.setContent("<p></p>");
+    }
+  }, [editor, field.value]);
   if (!mounted || !editor) return null;
 
   return (

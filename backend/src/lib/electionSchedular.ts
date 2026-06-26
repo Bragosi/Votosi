@@ -6,7 +6,6 @@ export const startElectionScheduler = () => {
     try {
       const now = new Date();
 
-      // UPCOMING -> ACTIVE
       await prisma.election.updateMany({
         where: {
           status: "UPCOMING",
@@ -22,7 +21,6 @@ export const startElectionScheduler = () => {
         },
       });
 
-      // ACTIVE -> ENDED
       await prisma.election.updateMany({
         where: {
           status: "ACTIVE",

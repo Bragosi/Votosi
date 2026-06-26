@@ -2,16 +2,13 @@
 
 import { ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
 import { useAuthStore } from "../store/useAuthStore";
-
+import Logo from "../../public/ondo state logo.png";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Loader2 } from "lucide-react";
+import Image from "next/image";
 
 export default function DashboardClientLayout({
   children,
@@ -19,8 +16,7 @@ export default function DashboardClientLayout({
   children: ReactNode;
 }) {
   const router = useRouter();
-    const { authUser, isCheckingAuth, checkAuth } = useAuthStore();
-
+  const { authUser, isCheckingAuth, checkAuth } = useAuthStore();
 
   // 1. Trigger the cookie check immediately when an authenticated page mounts
   useEffect(() => {
@@ -34,11 +30,37 @@ export default function DashboardClientLayout({
     }
   }, [authUser, isCheckingAuth, router]);
 
-  // 3. Show a clean loading screen while verifying the session cookie
   if (isCheckingAuth) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-background">
-        <Loader2 className="text-primary animate-spin size-12" />
+      <div
+        className="flex h-screen w-screen items-center justify-center bg-background"
+        role="status"
+        aria-live="polite"
+      >
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative flex items-center justify-center">
+            {/* Logo with pulse effect */}
+            <Image
+              src={Logo}
+              alt="Votosi Logo"
+              width={72}
+              height={72}
+              className="animate-pulse object-contain"
+              priority
+            />
+          </div>
+
+          <div className="text-center space-y-1">
+            <h2 className="text-xl font-semibold text-primary tracking-tight">
+              Votosi
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Securing your session...
+            </p>
+          </div>
+
+          <Loader2 className="h-6 w-6 animate-spin text-primary" />
+        </div>
       </div>
     );
   }

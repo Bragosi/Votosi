@@ -148,47 +148,47 @@ export default function AdminHomePage() {
         })}
       </div>
 
-{/* QUICK ACTIONS */}
-<section className="space-y-4">
-  <div>
-    <h2 className="text-xl text-primary font-semibold">Quick Actions</h2>
-    <p className="text-sm text-muted-foreground">
-      Frequently used administrative actions.
-    </p>
-  </div>
+      {/* QUICK ACTIONS */}
+      <section className="space-y-4">
+        <div>
+          <h2 className="text-xl text-primary font-semibold">Quick Actions</h2>
+          <p className="text-sm text-muted-foreground">
+            Frequently used administrative actions.
+          </p>
+        </div>
 
-  <div className="grid mt-1 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-4 md:gap-6">
-    {quickActions.map((action) => {
-      const Icon = action.icon;
+        <div className="grid mt-1 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-4 md:gap-6">
+          {quickActions.map((action) => {
+            const Icon = action.icon;
 
-      return (
-        <Link key={action.title} href={action.href}>
-          <Card className="h-full transition-all hover:shadow-md hover:border-primary/30 cursor-pointer">
-            <CardContent className="p-6 flex flex-col justify-between h-full">
-              <div className="flex items-start justify-between">
-                <div className="h-fit w-fit rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Icon className="size-6 text-primary" />
-                </div>
+            return (
+              <Link key={action.title} href={action.href}>
+                <Card className="h-full transition-all hover:shadow-md hover:border-primary/30 cursor-pointer">
+                  <CardContent className="p-6 flex flex-col justify-between h-full">
+                    <div className="flex items-start justify-between">
+                      <div className="h-fit w-fit rounded-xl bg-primary/10 flex items-center justify-center">
+                        <Icon className="size-6 text-primary" />
+                      </div>
 
-                <ArrowRight className="size-5 text-muted-foreground" />
-              </div>
+                      <ArrowRight className="size-5 text-muted-foreground" />
+                    </div>
 
-              <div className="mt-6 space-y-2">
-                <h3 className="font-semibold text-base leading-none">
-                  {action.title}
-                </h3>
+                    <div className="mt-6 space-y-2">
+                      <h3 className="font-semibold text-base leading-none">
+                        {action.title}
+                      </h3>
 
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {action.description}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-      );
-    })}
-  </div>
-</section>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {action.description}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
     </>
   );
 }

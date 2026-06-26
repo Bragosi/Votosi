@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useAuthStore } from "@/app/store/useAuthStore";
@@ -15,12 +14,7 @@ import {
   Shield,
 } from "lucide-react";
 import { EmptyState } from "@/components/general/EmptyState";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Profile() {
   const { isGettingAdmin, profile, getMeAdmin } = useAuthStore();
@@ -142,9 +136,7 @@ export default function Profile() {
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <MapPin className="size-4 text-primary" />
-                  <p className="text-sm font-medium">
-                    Residential Address
-                  </p>
+                  <p className="text-sm font-medium">Residential Address</p>
                 </div>
 
                 <div className="rounded-lg border bg-muted/30 p-4 text-sm">

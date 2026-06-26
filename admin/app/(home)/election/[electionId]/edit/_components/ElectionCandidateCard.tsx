@@ -9,7 +9,6 @@ import Image from "next/image";
 import {
   PlusCircleIcon,
   Vote,
-  User,
   Loader2,
   Flag,
   Venus,
@@ -83,7 +82,7 @@ export default function ElectionCandidateCard({ electionId }: Props) {
           href={`/election/${electionId}/candidate`}
         />
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3 auto-rows-fr">
           {safeCandidates.map((candidate: Candidate) => {
             const fullName = `${candidate.surname} ${candidate.firstName} ${
               candidate.otherName || ""
@@ -92,10 +91,10 @@ export default function ElectionCandidateCard({ electionId }: Props) {
             return (
               <Card
                 key={candidate.id}
-                className="group overflow-hidden py-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group flex flex-col h-full overflow-hidden py-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
                 {/* IMAGE */}
-                <div className="relative h-64 overflow-hidden">
+                <div className="relative h-56 w-full shrink-0 overflow-hidden">
                   <Image
                     src={candidate.imageUrl || "/placeholder.png"}
                     alt={fullName}
@@ -130,32 +129,25 @@ export default function ElectionCandidateCard({ electionId }: Props) {
                 </div>
 
                 {/* CONTENT */}
-                <CardContent className="p-6">
-                  <div className="space-y-4">
+                <CardContent className="flex flex-col flex-1 justify-between p-5">
+                  <div className="space-y-3.5">
                     {/* NAME */}
                     <div>
-                      <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground">
-                        <User className="size-3.5" />
-                        Candidate Name
-                      </div>
-
-                      <p className="mt-1 text-lg font-semibold line-clamp-2">
+                      <p className="text-lg font-semibold line-clamp-1">
                         {fullName}
                       </p>
                     </div>
 
                     {/* PARTY */}
                     <div className="flex items-center gap-3">
-                      <div className="rounded-md bg-primary/10 p-2">
+                      <div className="rounded-md bg-primary/10 p-2 shrink-0">
                         <Flag className="size-4 text-primary" />
                       </div>
-
-                      <div>
-                        <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                      <div className="min-w-0">
+                        <p className="text-[10px] uppercase tracking-wider text-muted-foreground leading-none mb-0.5">
                           Party
                         </p>
-
-                        <p className="font-medium">
+                        <p className="font-medium text-sm truncate">
                           {typeof candidate.party === "object"
                             ? candidate.party?.name
                             : candidate.party || "Independent"}
@@ -165,16 +157,14 @@ export default function ElectionCandidateCard({ electionId }: Props) {
 
                     {/* SEX */}
                     <div className="flex items-center gap-3">
-                      <div className="rounded-md bg-primary/10 p-2">
+                      <div className="rounded-md bg-primary/10 p-2 shrink-0">
                         <Venus className="size-4 text-primary" />
                       </div>
-
                       <div>
-                        <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                        <p className="text-[10px] uppercase tracking-wider text-muted-foreground leading-none mb-0.5">
                           Gender
                         </p>
-
-                        <p className="font-medium capitalize">
+                        <p className="font-medium text-sm capitalize">
                           {candidate.sex}
                         </p>
                       </div>
@@ -182,31 +172,29 @@ export default function ElectionCandidateCard({ electionId }: Props) {
 
                     {/* STATE */}
                     <div className="flex items-center gap-3">
-                      <div className="rounded-md bg-primary/10 p-2">
+                      <div className="rounded-md bg-primary/10 p-2 shrink-0">
                         <MapPin className="size-4 text-primary" />
                       </div>
-
                       <div>
-                        <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                        <p className="text-[10px] uppercase tracking-wider text-muted-foreground leading-none mb-0.5">
                           State of Origin
                         </p>
-
-                        <p className="font-medium">{candidate.state}</p>
+                        <p className="font-medium text-sm">{candidate.state}</p>
                       </div>
                     </div>
-
-                    {/* BUTTON */}
-                    <Link
-                      href={`/election/${electionId}/candidate/${candidate.id}/edit`}
-                      className={buttonVariants({
-                        className:
-                          "w-full mt-6 flex items-center justify-center gap-2",
-                      })}
-                    >
-                      Edit Candidate
-                      <ArrowRight className="size-4" />
-                    </Link>
                   </div>
+
+                  {/* BUTTON */}
+                  <Link
+                    href={`/election/${electionId}/candidate/${candidate.id}/edit`}
+                    className={buttonVariants({
+                      className:
+                        "w-full mt-5 flex items-center justify-center gap-2",
+                    })}
+                  >
+                    Edit Candidate
+                    <ArrowRight className="size-4" />
+                  </Link>
                 </CardContent>
               </Card>
             );

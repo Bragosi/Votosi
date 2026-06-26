@@ -25,11 +25,7 @@ type Election = {
   };
 };
 
-export default function DeleteElection({
-  election,
-}: {
-  election: Election;
-}) {
+export default function DeleteElection({ election }: { election: Election }) {
   const { DeleteElection, isDeletingElection } = useElectionStore();
   const [open, setOpen] = useState(false);
 
@@ -94,7 +90,7 @@ export default function DeleteElection({
           >
             {isDeletingElection ? (
               <>
-                <Loader2 className="mr-2 size-4 animate-spin" />
+                <Loader2 className="size-4 animate-spin" />
                 Deleting...
               </>
             ) : (

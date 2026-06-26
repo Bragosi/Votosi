@@ -65,7 +65,6 @@ export default function AddOfficers() {
           <TabsContent value="register" className="space-y-4">
             <Card className="border-border/60 shadow-sm">
               <CardContent>
-                {/* Replace this with your Form component */}
                 <div className="text-sm text-muted-foreground">
                   <RegisterOfficersForm />
                 </div>

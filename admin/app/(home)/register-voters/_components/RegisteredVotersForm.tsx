@@ -115,12 +115,9 @@ export default function RegisterVoterForm() {
       <Card className="w-full max-w-3xl border-border/60 shadow-sm rounded-xl">
         {/* HEADER */}
         <CardHeader className="space-y-2 text-center sm:text-left">
-          <CardTitle className="text-xl sm:text-2xl">
-            Register Voter
-          </CardTitle>
+          <CardTitle className="text-xl sm:text-2xl">Register Voter</CardTitle>
           <CardDescription>
-            Add a new Citizen and give them access to vote
-            system.
+            Add a new Citizen and give them access to vote system.
           </CardDescription>
         </CardHeader>
 
@@ -321,7 +318,7 @@ export default function RegisterVoterForm() {
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="PRIMARY">Primary</SelectItem>
-                           <SelectItem value="SECONDARY">Secondary</SelectItem>
+                          <SelectItem value="SECONDARY">Secondary</SelectItem>
                           <SelectItem value="TERTIARY">Tertiary</SelectItem>
                         </SelectContent>
                       </Select>
@@ -336,7 +333,7 @@ export default function RegisterVoterForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>State</FormLabel>
-                      <FormControl> 
+                      <FormControl>
                         <Input placeholder="e.g. Lagos" {...field} />
                       </FormControl>
                       <FormMessage />
@@ -377,7 +374,7 @@ export default function RegisterVoterForm() {
               <Button type="submit" disabled={pending} className="w-full">
                 {pending ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin" />
                     Registering...
                   </>
                 ) : (

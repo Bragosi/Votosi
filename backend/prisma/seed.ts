@@ -12,7 +12,7 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  console.log('🌱 Starting database seeding...');
+  console.log('Starting database seeding...');
 
 
   await prisma.voter.deleteMany({});
@@ -44,8 +44,8 @@ async function main() {
     },
   });
 
-  console.log(`✅ Super Admin seeded: ${superAdmin.email} (${superAdmin.adminId})`);
-  console.log('🌿 Seeding completed successfully!');
+  console.log(`Super Admin seeded: ${superAdmin.email} (${superAdmin.adminId})`);
+  console.log('Seeding completed successfully!');
 }
 
 main()

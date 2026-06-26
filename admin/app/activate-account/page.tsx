@@ -25,7 +25,7 @@ export default function ActivateAdminAccount() {
 
       {/* Main Card Container */}
       <div className="w-full max-w-md">
-          <ActivateAdminForm />
+        <ActivateAdminForm />
       </div>
     </div>
   );

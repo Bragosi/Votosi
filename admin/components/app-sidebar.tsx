@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
@@ -15,21 +14,16 @@ import {
 } from "@/components/ui/sidebar";
 import {
   LayoutDashboardIcon,
-  CameraIcon,
-  FileTextIcon,
-  Settings2Icon,
-  SearchIcon,
-  CommandIcon,
   User2,
   BoxIcon,
   UserCircle2Icon,
 } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/app/store/useAuthStore";
-
+import Image from "next/image";
+import Logo from "../public/ondo state logo.png";
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { authUser } = useAuthStore();
-
   const role = authUser?.role;
 
   const allNavMain = [
@@ -65,7 +59,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     user: {
       name: authUser?.firstName ?? "",
       email: authUser?.email ?? "",
-      avatar: authUser?.profilePicture ?? "",
+      avatar: authUser?.profilePicture || undefined,
     },
     navMain,
   };
@@ -78,9 +72,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
-              <Link href="/">
-                <CommandIcon className="size-5!" />
-                <span className="text-primary font-semibold">Votosi</span>
+              <Link
+                href="/"
+                className="flex items-center gap-3 transition-opacity hover:opacity-90"
+              >
+                <Image
+                  src={Logo}
+                  alt="Votosi Logo"
+                  width={40}
+                  height={40}
+                  className="h-16 w-16 object-contain"
+                />
+
+                <span className="text-xl font-bold tracking-tight text-primary">
+                  Votosi
+                </span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

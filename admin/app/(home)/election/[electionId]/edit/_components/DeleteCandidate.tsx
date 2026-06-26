@@ -63,14 +63,10 @@ export default function DeleteCandidate({
             <br />
             <br />
             Party:{" "}
-            <span className="font-medium text-primary">
-              {candidate.party}
-            </span>
+            <span className="font-medium text-primary">{candidate.party}</span>
             <br />
             Candidate ID:{" "}
-            <span className="font-medium text-primary">
-              {candidate.id}
-            </span>
+            <span className="font-medium text-primary">{candidate.id}</span>
             <br />
             <br />
             This action cannot be undone. Any votes associated with this
@@ -90,7 +86,7 @@ export default function DeleteCandidate({
           >
             {isDeletingCandidate ? (
               <>
-                <Loader2 className="mr-2 size-4 animate-spin" />
+                <Loader2 className="size-4 animate-spin" />
                 Deleting Candidate...
               </>
             ) : (

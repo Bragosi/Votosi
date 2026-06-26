@@ -18,6 +18,8 @@ import { adminLoginSchema, adminLoginSchemaType } from "@/lib/zodSchema";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import Logo from "../public/ondo state logo.png";
 
 export function LoginForm({
   className,
@@ -49,74 +51,103 @@ export function LoginForm({
   return (
     <div
       className={cn(
-        "flex items-center justify-center min-h-screen px-4",
-        className,
+        "relative flex min-h-screen items-center justify-center overflow-hidden bg-linear-to-br from-background via-background to-muted/30 px-4 py-10",
+        className
       )}
       {...props}
     >
-      <Card className="w-full max-w-md shadow-lg border-muted">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-semibold">Welcome back</CardTitle>
-          <CardDescription>
-            Login to access your admin dashboard
-          </CardDescription>
+      {/* Background decoration */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute left-0 top-0 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
+      </div>
+
+      <Card className="w-full max-w-md border shadow-xl backdrop-blur-sm">
+        <CardHeader className="space-y-6 pb-2">
+          <div className="flex flex-col items-center">
+              <Image
+                src={Logo}
+                alt="Votosi Logo"
+                width={80}
+                height={80}
+                className="object-contain animate-bounce"
+                priority
+              />
+
+            <CardTitle className="text-center text-3xl font-bold tracking-tight">
+              Welcome Back
+            </CardTitle>
+
+            <CardDescription className="mt-2 text-center text-sm">
+              Sign in to access the Votosi Admin Dashboard
+            </CardDescription>
+          </div>
         </CardHeader>
 
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            {/* Email */}
+        <CardContent className="pt-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <FieldGroup>
               <Field>
-                <FieldLabel htmlFor="email">Email or Admin Id</FieldLabel>
+                <FieldLabel htmlFor="identifier">
+                  Email or Admin ID
+                </FieldLabel>
+
                 <Input
                   id="identifier"
                   type="text"
-                  placeholder="Enter email or admin ID"
+                  placeholder="Enter your email or admin ID"
+                  autoComplete="username"
                   {...register("identifier")}
                 />
 
                 {errors.identifier && (
-                  <p className="text-xs text-red-500 mt-1">
+                  <p className="mt-2 text-sm text-destructive">
                     {errors.identifier.message}
                   </p>
                 )}
               </Field>
 
-              {/* Password */}
               <Field>
-                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <FieldLabel htmlFor="password">
+                  Password
+                </FieldLabel>
+
                 <Input
                   id="password"
                   type="password"
                   placeholder="••••••••"
+                  autoComplete="current-password"
                   {...register("password")}
                 />
+
                 {errors.password && (
-                  <p className="text-xs text-red-500 mt-1">
+                  <p className="mt-2 text-sm text-destructive">
                     {errors.password.message}
                   </p>
                 )}
               </Field>
 
-              {/* Submit */}
-              <Button type="submit" disabled={isLoggingIn} className="w-full">
+              <Button
+                type="submit"
+                disabled={isLoggingIn}
+                className="h-11 w-full text-base font-medium"
+              >
                 {isLoggingIn ? (
-                  <div className="flex items-center gap-2">
-                    <Loader2 className="animate-spin size-4" />
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
                     Signing in...
-                  </div>
+                  </>
                 ) : (
-                  "Login"
+                  "Sign In"
                 )}
               </Button>
             </FieldGroup>
 
-            {/* Activation link */}
-            <div className="text-center text-sm text-muted-foreground">
-              Don’t have an activated account?{" "}
+            <div className="border-t pt-4 text-center text-sm text-muted-foreground">
+              Don't have an activated account?{" "}
               <Link
                 href="/activate-account"
-                className="text-primary font-medium hover:underline"
+                className="font-semibold text-primary transition-colors hover:text-primary/80 hover:underline"
               >
                 Activate account
               </Link>

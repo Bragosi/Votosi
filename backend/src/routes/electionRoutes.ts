@@ -10,6 +10,7 @@ import { GetCandidatesInElection } from "../controllers/electionControllers/GetC
 import { DeleteCandidate } from "../controllers/electionControllers/DeleteCandidate.js";
 import { GetCandidateById } from "../controllers/electionControllers/GetCandidateById.js";
 import { adminOnly } from "../middleware/adminMiddleWare.js";
+import { EditCandidate } from "../controllers/electionControllers/EditCandidate.js";
 
 const router = express.Router();
 router.post("/createElection", protectRoute, adminOnly, CreateElection);
@@ -20,5 +21,7 @@ router.post("/createCandidate/:electionId/candidate", protectRoute, adminOnly, u
 router.get("/getCandidatesInElection/:electionId", GetCandidatesInElection); 
 router.delete("/deleteCandidate/:candidateId", protectRoute, adminOnly,  DeleteCandidate);
 router.get("/getCandidateById/:candidateId", GetCandidateById); 
+router.put("/editCandidate/:candidateId",protectRoute,adminOnly,upload.single("profilePicture"),EditCandidate
+);
 export default router;
 

@@ -73,7 +73,6 @@ export const RegisterOfficer = async (req: Request, res: Response) => {
         LGA,
         education,
         residentialAddress,
-
         adminId: generatedAdminId,
         activationPin: hashedPin,
       },

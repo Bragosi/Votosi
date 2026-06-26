@@ -9,7 +9,6 @@ import {
 import RegisterVoterForm from "./_components/RegisteredVotersForm";
 import RegisteredVoters from "./_components/RegisteredVoters";
 
-
 export default function RegisterVoters() {
   return (
     <div className="space-y-8">
@@ -27,7 +26,6 @@ export default function RegisterVoters() {
       {/* Tabs */}
       <Tabs defaultValue="approved" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 bg-muted p-1 rounded-xl h-11">
-          
           <TabsTrigger
             value="approved"
             className="rounded-lg text-sm font-medium data-[state=active]:bg-background data-[state=active]:shadow-sm"
@@ -47,9 +45,7 @@ export default function RegisterVoters() {
         <TabsContent value="approved" className="space-y-4">
           <Card className="border-border/60 shadow-sm">
             <CardHeader>
-              <CardTitle className="text-lg">
-                Approved Voters
-              </CardTitle>
+              <CardTitle className="text-lg">Approved Voters</CardTitle>
               <CardDescription>
                 View and manage all voters with system access.
               </CardDescription>
@@ -66,7 +62,7 @@ export default function RegisterVoters() {
           <Card className="border-border/60 shadow-sm">
             <CardContent>
               <div className="text-sm text-muted-foreground">
-                <RegisterVoterForm/>
+                <RegisterVoterForm />
               </div>
             </CardContent>
           </Card>
